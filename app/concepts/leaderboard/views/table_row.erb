@@ -68,6 +68,8 @@
 
   <td class="last-submission">
     <%= entry.created_at.strftime("%a, %e %b %Y %R") %>
+    <br>
+    <%= local_time entry.created_at %>
   </td>
   <td class='action'>
     <% if challenge.submissions_page %>
