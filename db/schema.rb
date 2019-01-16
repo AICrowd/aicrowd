@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_15_130935) do
+ActiveRecord::Schema.define(version: 2019_01_15_021746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -312,6 +312,7 @@ ActiveRecord::Schema.define(version: 2018_11_15_130935) do
     t.text "toc_acceptance_instructions"
     t.text "toc_acceptance_instructions_markdown"
     t.boolean "toc_accordion", default: false
+    t.string "dynamic_content_url"
     t.index ["clef_task_id"], name: "index_challenges_on_clef_task_id"
     t.index ["organizer_id"], name: "index_challenges_on_organizer_id"
     t.index ["slug"], name: "index_challenges_on_slug", unique: true
@@ -644,6 +645,8 @@ ActiveRecord::Schema.define(version: 2018_11_15_130935) do
     t.boolean "clef_email", default: false
     t.integer "sash_id"
     t.integer "level", default: 0
+    t.string "provider"
+    t.string "uid"
     t.index ["confirmation_token"], name: "index_participants_on_confirmation_token", unique: true
     t.index ["email"], name: "index_participants_on_email", unique: true
     t.index ["organizer_id"], name: "index_participants_on_organizer_id"
@@ -661,6 +664,13 @@ ActiveRecord::Schema.define(version: 2018_11_15_130935) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.index ["organizer_id"], name: "index_partners_on_organizer_id"
+  end
+
+  create_table "reserved_userhandles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_reserved_userhandles_on_name", unique: true
   end
 
   create_table "sashes", force: :cascade do |t|
