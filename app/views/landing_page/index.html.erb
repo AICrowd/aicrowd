@@ -73,8 +73,8 @@
             <div id="testimonial-1" class="carousel-item active">
               <blockquote class="blockquote-testimonial">
                 <img class="avatar" src="assets/img/testimonial-1.jpeg">
-                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis blandit ligula at facilisis aliquam. Sed faucibus at elit at tincidunt.</p>
-                <footer class="blockquote-footer">Grant Hayes, Google</footer>
+                <p class="mb-0">"Crowdsourcing far exceeded our expectations - you not only get new solutions, but also a deeper insight to the problem you are trying to solve."</p>
+                <footer class="blockquote-footer">Erik Nygren, Akamai Technologies</footer>
               </blockquote>
             </div>
             <!-- /testimonial -->
@@ -187,5 +187,32 @@
 
     </div>
   </div>
+</section>
+<!-- /section -->
+
+<!-- section -->
+<section class="section-pb-md">
+
+  <!-- blog post previews -->
+  <div class="container-fluid">
+    <div class="row">
+      
+      <!-- section header -->
+      <div class="col-12">
+        <header class="section-header-decorative">
+          <div>
+            <h4>From the blog</h4>
+          </div>
+          <%= link_to '<button type="button" class="btn btn-secondary btn-sm">See all</button>'.html_safe, blogs_path %>
+        </header>
+      </div>
+      <!-- /section header -->
+      <% @blog_posts.each do |post| %>
+            <%= render partial: 'blog_post', locals: {post: post} %>
+      <% end %>
+    </div>
+  </div>
+  <!-- /blog post previews -->
+
 </section>
 <!-- /section -->
