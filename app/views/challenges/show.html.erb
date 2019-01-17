@@ -1,3 +1,349 @@
+<!-- masthead - challenge -->
+<div class="masthead masthead-challenge">
+  <div class="container-fluid">
+
+    <!-- badges -->
+    <div class="row">
+      <div class="col-12">
+        <span class="badge badge-primary">
+          <img src="/assets/img/icon-time.svg">
+          Round 1: time
+        </span>
+
+        <span class="badge badge-primary">
+          <img src="/assets/img/icon-time.svg">
+          Round 2: time
+        </span>
+
+<!--         <span class="badge badge-outline">
+          Challenge category
+        </span>
+ -->      </div>
+    </div>
+    <!-- /badges -->
+
+    <!-- title/description/prizes -->
+    <div class="row">
+      <div class="col-sm-12 col-md-8 col-lg-9">
+        <h1><%= @challenge.challenge %></h1>
+        <p><%= @challenge.description.html_safe %></p>
+      </div>
+
+      <div class="col-sm-12 col-md-4 col-lg-3">
+        <div class="prizes-breakdown">
+          <div class="prize-item prize-item-cash">
+            $1 Million USD Prize Money
+          </div>
+          <div class="prize-item prize-item-travel">
+            5 Travel Grants
+          </div>
+          <div class="prize-item prize-item-academic">
+            8 Academic Papers
+          </div>
+          <div class="prize-item prize-item-misc">
+            Misc Prizes
+          </div>
+        </div>  
+      </div>
+    </div>
+    <!-- /title/description/prizes -->
+
+    <!-- organizer/stats/options -->
+    <div class="row">
+      <div class="col-12 d-flex align-items-center flex-wrap">
+        <div class="organizer-attribution">
+          <%= link_to organizer_path(@challenge.organizer) do %>
+            <span>By <%= @challenge.organizer.organizer %></span>
+          <% end %>
+        </div>
+
+        <div class="stats-group">
+          <div class="stat-item">
+            <span data-toggle="tooltip" data-placement="top" title="No. of views">
+              <img src="/assets/img/icon-views.svg">
+                <%= concept(Challenge::Cell::Statistic,@challenge,type: 'view', current_participant: current_participant) %>
+            </span>
+          </div>
+          <div class="stat-item">
+            <span data-toggle="tooltip" data-placement="top" title="No. of users">
+              <img src="/assets/img/icon-users.svg">
+              <%= concept(Challenge::Cell::Statistic,@challenge,type: 'participant', current_participant: current_participant) %>
+            </span>
+          </div>
+          <div class="stat-item">
+            <span data-toggle="tooltip" data-placement="top" title="No. of teams">
+              <img src="/assets/img/icon-teams.svg">
+              <%= concept(Challenge::Cell::Statistic,@challenge,type: 'participant', current_participant: current_participant) %>
+            </span>
+          </div>
+          <div class="stat-item">
+            <span data-toggle="tooltip" data-placement="top" title="No. of submissions">
+              <img src="/assets/img/icon-submissions.svg">
+              <%= concept(Challenge::Cell::Statistic,@challenge,type: 'submission', current_participant: current_participant) %>
+            </span>
+          </div>
+        </div>
+<!-- 
+        <div class="btn-set" aria-hidden="true">
+          <button type="button" class="btn btn-secondary btn-sm">
+            <svg width="12" height="11" xmlns="http://www.w3.org/2000/svg"><path d="M10.8746251 6.14539024L5.97691577 11.0430996 1.07920644 6.14539024C.43154568 5.50196808.03030318 4.61061457.03030318 3.62554576c0-1.96049121 1.58929212-3.54978364 3.54978364-3.54978364.92305599 0 1.76382467.35231416 2.39516959.92980603.63649437-.6044087 1.49691101-.97526512 2.44394586-.97526512 1.96049123 0 3.54978363 1.58929242 3.54978363 3.54978364 0 1.00819292-.4203017 1.91821904-1.0952455 2.56441886z" fill="#909293" fill-rule="evenodd"/></svg>
+            36
+          </button>
+
+          <button type="button" class="btn btn-secondary btn-sm">Follow</button>
+        </div>
+ -->      </div>
+    </div>
+    <!-- /organizer/stats/options -->
+
+  </div>
+</div>
+<!-- /masthead - challenge -->  
+
+<!-- sub-nav bar -->
+<div class="sub-nav-bar sticky-top">
+  <div class="container-fluid">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link nav-link-01 active" href="#">Overview</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-02" href="#">Leaderboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-03" href="#">Discussion</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-04" href="#">Dataset</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link-05" href="#">Submissions</a>
+      </li>
+
+      <!-- more dropdown md -->
+      <li class="nav-item dropdown more-md">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><svg width="16" height="4" xmlns="http://www.w3.org/2000/svg"><path d="M2 0C.9 0 0 .9 0 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM8 0C6.9 0 6 .9 6 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#5D5F60" fill-rule="nonzero"/></svg></a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#"><strong>Participate</strong></a>
+        </div>
+      </li>
+      <!-- /more dropdown md -->
+
+      <!-- more dropdown sm -->
+      <li class="nav-item dropdown more-sm">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><svg width="16" height="4" xmlns="http://www.w3.org/2000/svg"><path d="M2 0C.9 0 0 .9 0 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM8 0C6.9 0 6 .9 6 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#5D5F60" fill-rule="nonzero"/></svg></a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#">Submissions</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#"><strong>Participate</strong></a>
+        </div>
+      </li>
+      <!-- /more dropdown sm -->
+
+      <!-- more dropdown xs -->
+      <li class="nav-item dropdown more-xs">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><svg width="16" height="4" xmlns="http://www.w3.org/2000/svg"><path d="M2 0C.9 0 0 .9 0 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM8 0C6.9 0 6 .9 6 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#5D5F60" fill-rule="nonzero"/></svg></a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#">Discussion</a>
+          <a class="dropdown-item" href="#">Dataset</a>
+          <a class="dropdown-item" href="#">Submissions</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#"><strong>Participate</strong></a>
+        </div>
+      </li>
+      <!-- /more dropdown xs -->
+    </ul>
+
+    <a class="btn btn-primary btn-sm" role="button">Participate</a>
+  </div>
+</div>
+<!-- /sub-nav bar -->
+
+<!-- section -->
+<section class="section-p-md">
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- sub-nav – vertical -->
+      <div class="col-lg-2 sub-nav-vertical-container">
+        <ul class="nav flex-column sticky-top-sub-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="#introduction">Introduction</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#dataset">Dataset</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#partners">Partners</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#rules">Rules</a>
+          </li>
+        </ul>
+      </div>
+      <!-- /sub-nav – vertical -->
+
+      <!-- md content -->
+      <div class="col-md-8 col-lg-7">
+        <div id="introduction" class="md-content">
+
+          <div class="update">
+            <strong>Update 20 Nov 2018</strong>: Unfortunately we have had to make some changes to the challenge dataset. More specifically, we have had to remove some features from the track features table (the updated Dataset Description file outlines the new track features schema). Please note that the other parts of the dataset all remain unchanged, except the track features table in the mini version of the dataset which was changed correspondingly. We apologize for any inconvenience caused by this change. If your work on the challenge is affected, we would appreciate if you email us at <a href="#">wsdm-cup-2019@spotify.com</a> so that we can better understand any potential impact on participants.
+          </div>
+
+          <p class="lead">Spotify is an online music streaming service with over 190 million active users interacting with a library of over 40 million tracks.</p>
+
+          <p>A central challenge for Spotify is to recommend the right music to each user. While there is a large related body of work on recommender systems, there is very little work, or data, describing how users sequentially interact with the streamed content they are presented with. In particular within music, the question of if, and when, a user skips a track is an important implicit feedback signal.</p>
+
+          <img class="md-image" src="assets/img/challenge-article-1.jpg">
+
+          <p>We release this dataset and challenge in the hope of spurring research on this important and understudied problem in streaming. Our challenge focuses on the task of session-based sequential skip prediction, i.e. predicting whether users will skip tracks, given their immediately preceding interactions in their listening session.</p>
+
+          <p>The organization of this challenge is a joint effort of <a href="#">Spotify</a>, <a href="#">WSDM</a>, and <a href="#">CrowdAI</a>.</p>
+
+          <h1 id="dataset">Dataset</h1>
+
+          <p>The public part of the dataset consists of roughly 130 million listening sessions with associated user interactions on the Spotify service. In addition to the public part of the dataset, approximately 30 million listening sessions are used for the challenge leaderboard. For these leaderboard sessions the participant is provided all the user interaction features for the first half of the session, but only the track id's for the second half. In total, users interacted with almost 4 million tracks during these sessions, and the dataset includes acoustic features and metadata for all of these tracks.</p>
+
+          <h2>Sub-heading</h2>
+
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et egestas nisi, nec faucibus ligula. Vestibulum convallis mollis sollicitudin. Mauris ultrices nibh libero, in viverra dui tempus vel:</p>
+
+          <ul>
+            <li>Curabitur tincidunt nibh quis vulputate porttitor</li>
+            <li>Praesent a tempor elit</li>
+            <li>Fusce pulvinar leo eu magna luctus</li>
+          </ul>
+
+          <h1 id="partners">Partners</h1>
+
+          <div class="logos-organizers">
+            <div class="logo-organizer">
+              <img class="img-fluid" src="assets/img/logo-organizer-un.svg">
+            </div>
+            <div class="logo-organizer">
+              <img class="img-fluid" src="assets/img/logo-organizer-uber.svg">
+            </div>  
+          </div>
+
+          <h1 id="rules">Rules</h1>
+
+          <p>The competition rules are given below, the dataset terms of use and challenge terms and conditions can be found on the Dataset page.</p>
+
+          <ol>
+            <li>Participants must agree to the dataset terms of use and challenge terms and conditions in order to participate in this challenge.</li>
+            <li>Each [participant] account shall represent only one (1) team.</li>
+            <li>Team mergers are allowed at any time prior to the two (2) week period before the competition end date and must be communicated in writing to the challenge organizers at <a href="#">wsdm-cup-2019@spotify.com</a>.</li>
+            <li>A merged team forms one (1) teams for the remainder of the competition, and such team must designate a single account for subsequent submissions in the competition. The other accounts associated with team members in a merged team shall not be used for further submissions.</li>
+            <li>Each team may only make five (5) submissions per day. The last submission day is January 4, 2019.</li>
+            <li>At the end of the challenge, each team is required to open source the source code that was used to generate their final challenge solution under the Apache license 2.0. To be eligible for the leaderboard or prizes, teams are also required to submit papers describing their method to the WSDM Cup Workshop. See the ‘Call for Papers’ section below for further details.</li>
+            <li>Teams may use external data and pretrained models, provided these are public, and linked with the source code provided for the final submission.</li>
+            <li>Teams may use the Spotify API to augment the dataset, provided this use complies with the terms of service for the Spotify API, and that the augmentation is included with the source code provided for the final submission.</li>
+            <li>Spotify employees and their in-home relatives are prohibited from participating in the contest.</li>
+            <li>Ask us: If you are not sure whether something is allowed or not, do not hesitate to contact us at <a href="#">wsdm-cup-2019@spotify.com</a>! We can quickly give you the information you need.</li>
+          </ol>
+
+          <div class="btn-set" aria-hidden="true">
+            <a class="btn btn-secondary" href="#" role="button">Next: Leaderboard</a>
+            <a class="btn btn-primary" href="#" role="button">Participate</a>
+          </div>
+
+        </div> 
+      </div>
+      <!-- /md content -->
+
+      <!-- top contributors -->
+      <div class="top-contributors-container col-sm-12 col-md-4 col-lg-3">
+        <header class="section-header">
+          <div>
+            <h4>Top contributors</h4>
+          </div>
+        </header>
+
+        <div class="card">
+          <ul class="list-group list-group-flush list-group-top-contributors">
+
+            <!-- user -->
+            <li class="list-group-item">
+              <a href="#">
+                <img class="avatar" src="assets/img/user-avatar-default.svg">
+                <span class="text-link">spMohanty</span>
+              </a> 
+              <div class="submissions">
+                <img src="assets/img/icon-submissions.svg">
+                <span>12</span>
+              </div>
+            </li>
+            <!-- /user -->
+
+            <!-- user -->
+            <li class="list-group-item">
+              <a href="#">
+                <img class="avatar" src="assets/img/user-avatar-default.svg">
+                <span class="text-link">learner6</span>
+              </a> 
+              <div class="submissions" data-toggle="tooltip" data-placement="top" title="Submissions made">
+                <img src="assets/img/icon-submissions.svg">
+                <span>9</span>
+              </div>
+            </li>
+            <!-- /user -->
+
+            <!-- user -->
+            <li class="list-group-item">
+              <a href="#">
+                <img class="avatar" src="assets/img/user-avatar-default.svg">
+                <span class="text-link">TaeJunMoon</span>
+              </a> 
+              <div class="submissions">
+                <img src="assets/img/icon-submissions.svg">
+                <span>8</span>
+              </div>
+            </li>
+            <!-- /user -->
+
+            <!-- user -->
+            <li class="list-group-item">
+              <a href="#">
+                <img class="avatar" src="assets/img/user-avatar-default.svg">
+                <span class="text-link">MaurizioFD</span>
+              </a> 
+              <div class="submissions">
+                <img src="assets/img/icon-submissions.svg">
+                <span>6</span>
+              </div>
+            </li>
+            <!-- /user -->
+
+            <!-- user -->
+            <li class="list-group-item">
+              <a href="#">
+                <img class="avatar" src="assets/img/user-avatar-default.svg">
+                <span class="text-link">brianbrost</span>
+              </a> 
+              <div class="submissions">
+                <img src="assets/img/icon-submissions.svg">
+                <span>5</span>
+              </div>
+            </li>
+            <!-- /user -->
+            
+          </ul>
+        </div>  
+      </div>
+      <!-- /top contributors -->
+
+    </div>
+  </div>
+</section>
+<!-- /section -->
+
+</main>
+
+
+
+
+
 <div class='content'>
   <%= concept(Challenge::Cell::ChallengeMasthead, @challenge, current_participant: current_participant) %>
 
