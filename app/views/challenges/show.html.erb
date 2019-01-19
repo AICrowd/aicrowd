@@ -148,7 +148,13 @@ TODO: Implement Following and changeing of text to followed
       <!-- /more dropdown xs -->
     </ul>
 
+    <% if policy(@challenge).edit? %>
+        <%= link_to edit_organizer_challenge_path(@challenge.organizer,@challenge), title: "Edit challenge", data: { turbolinks: false } do %>
+        <button class="btn btn-secondary btn-sm" role="button">Edit Challenge</button>
+      <% end %>
+    <%else %>
     <a class="btn btn-primary btn-sm" role="button">Participate</a>
+    <% end %>
   </div>
 </div>
 <!-- /sub-nav bar -->
