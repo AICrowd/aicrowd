@@ -30,20 +30,7 @@
       </div>
 
       <div class="col-sm-12 col-md-4 col-lg-3">
-        <div class="prizes-breakdown">
-          <div class="prize-item prize-item-cash">
-            $1 Million USD Prize Money
-          </div>
-          <div class="prize-item prize-item-travel">
-            5 Travel Grants
-          </div>
-          <div class="prize-item prize-item-academic">
-            8 Academic Papers
-          </div>
-          <div class="prize-item prize-item-misc">
-            Misc Prizes
-          </div>
-        </div>  
+        <%= concept(Challenge::Cell::PrizesBreakdown,@challenge) %>
       </div>
     </div>
     <!-- /title/description/prizes -->
@@ -203,7 +190,7 @@
 
           <h1 id="dataset">Dataset</h1>
 
-          <p>The public part of the dataset consists of roughly 130 million listening sessions with associated user interactions on the Spotify service. In addition to the public part of the dataset, approximately 30 million listening sessions are used for the challenge leaderboard. For these leaderboard sessions the participant is provided all the user interaction features for the first half of the session, but only the track id's for the second half. In total, users interacted with almost 4 million tracks during these sessions, and the dataset includes acoustic features and metadata for all of these tracks.</p>
+          <p>The public part of the dataset consists of roughly 130 million listening sessions with associated user interactions on the Spotify service. In addition to the public part of the dataset, approximately 30 million listening sessions are used for the challenge leaderboard. For these leaderboard sessions the participant is provided all the user interaction features for the first half of the session, but only the track ids for the second half. In total, users interacted with almost 4 million tracks during these sessions, and the dataset includes acoustic features and metadata for all of these tracks.</p>
 
           <h2>Sub-heading</h2>
 
@@ -339,66 +326,3 @@
 <!-- /section -->
 
 </main>
-
-
-
-
-
-<div class='content'>
-  <%= concept(Challenge::Cell::ChallengeMasthead, @challenge, current_participant: current_participant) %>
-
-  <%= render partial: 'challenges/show/subnav',
-        locals: { challenge: @challenge } %>
-
-  <div class="row">
-    <div class="article">
-
-      <% if @challenge.description.present? %>
-        <h2>Overview</h2>
-        <div class='markdown-wrap'>
-          <%= @challenge.description.html_safe %>
-        </div>
-      <% end %>
-
-      <% if @challenge.challenge_partners.any? %>
-        <h2>Partners</h2>
-        <div class='markdown-wrap'>
-          <% @challenge.challenge_partners.each do |partner|%>
-            <%= link_to partner.partner_url, target: :_blank do %>
-              <%= image_tag partner.image_file.url, class: 'img-logo' %>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-
-      <% if @challenge.evaluation.present? %>
-        <h2>Evaluation</h2>
-        <div class='markdown-wrap'>
-          <%= sanitize(@challenge.evaluation) %>
-        </div>
-      <% end %>
-
-      <% if @challenge.rules.present? %>
-        <h2>Rules</h2>
-        <div class='markdown-wrap'>
-          <%= sanitize(@challenge.rules) %>
-        </div>
-      <% end %>
-
-      <% if @challenge.prizes.present? %>
-        <h2>Prizes</h2>
-        <div class='markdown-wrap'>
-          <%= sanitize(@challenge.prizes) %>
-        </div>
-      <% end %>
-
-      <% if @challenge.resources.present? %>
-        <h2>Resources</h2>
-        <div class='markdown-wrap'>
-          <%= sanitize(@challenge.resources) %>
-        </div>
-      <% end %>
-
-    </div>
-  </div>
-</div>
