@@ -78,7 +78,6 @@ if Rails.env == 'development'
       organizer_id: 21,
       challenge: "Train Schedule Optimisation Challenge",
       prize_cash: "$1 Million USD",
-      prize_travel: "5",
       prize_academic: "8",
       prize_misc: "Some other things",
       status_cd: "running",
