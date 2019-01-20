@@ -1,8 +1,9 @@
-if Rails.env == 'development'
+if Rails.env == 'development' || Rails.env == 'staging'
 
   JobPosting.destroy_all
   Blog.destroy_all
   Submission.destroy_all
+  ChallengeParticipant.destroy_all
   Participant.destroy_all
   BaseLeaderboard.destroy_all
   ChallengeRound.destroy_all
