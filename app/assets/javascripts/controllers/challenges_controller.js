@@ -7,7 +7,9 @@
     });
     $( "#sortable" ).disableSelection();
     var order = $("#sortable").sortable("toArray");
-    $('#order').val(order.join(","));
+    if(order.length > 0){
+      $('#order').val(order.join(","));
+    }
   } );
 
 
