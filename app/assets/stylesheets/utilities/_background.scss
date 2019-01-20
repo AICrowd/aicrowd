@@ -1,0 +1,38 @@
+// stylelint-disable declaration-no-important
+
+@each $color, $value in $theme-colors {
+  @include bg-variant(".bg-#{$color}", $value);
+}
+
+@if $enable-gradients {
+  @each $color, $value in $theme-colors {
+    @include bg-gradient-variant(".bg-gradient-#{$color}", $value);
+  }
+}
+
+.bg-white {
+  background-color: $white !important;
+}
+
+.bg-light {
+  background-color: $gray-050 !important;
+}
+
+.bg-transparent {
+  background-color: transparent !important;
+}
+
+.bg-graph {
+  background-image: url('../../assets/img/bg-graph.svg');
+  background-position: right -320px top 200px;
+  background-repeat: no-repeat, no-repeat;
+  @include media-breakpoint-down(md) {
+    background-position: right -480px top 180px;
+  }
+  @include media-breakpoint-down(md) {
+    background-position: right -680px top 160px;
+  }
+  @include media-breakpoint-down(sm) {
+    background-image: none;
+  }
+}
