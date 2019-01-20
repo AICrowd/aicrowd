@@ -52,9 +52,10 @@
     <!-- /card body -->
 
     <div class="card-footer">
-      <%= link_to organizer_path(challenge.organizer) do %>
-        <span>By <%= challenge.organizer.organizer %></span>
-      <% end %>
+      <span> By &nbsp;</span>
+        <%= link_to organizer_path(challenge.organizer) do %>
+          <span><%= challenge.organizer.organizer %></span>
+        <% end %>
     </div>
   
   </div>
