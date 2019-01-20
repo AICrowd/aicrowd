@@ -24,6 +24,7 @@ Rails.application.configure do
   config.active_record.migration_error = :page_load
   config.assets.debug = true
   config.assets.check_precompiled_asset = false
+  config.assets.unknown_asset_fallback = true
   config.assets.quiet = false
   config.assets.raise_runtime_errors = true
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
