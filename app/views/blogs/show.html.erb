@@ -69,60 +69,9 @@
         </header>
       </div>
       <!-- /section header -->
-
-      <!-- blog post -->
-      <div class="col-sm-12 col-md-4">
-        <div class="card card-blog-post">
-          <div class="card-body">
-            <h5 class="card-title"><a href="#">Spotify <> crowdAI : How likely are you to skip a particular song?</a></h5>
-            <p class="card-text">16 November 2018</p>
-          </div>
-
-          <div class="card-footer">
-            <a href="#">
-              <img class="avatar" src="assets/img/user-avatar-default.svg"> 
-              <span>By spMohanty</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <!-- /blog post -->
-
-      <!-- blog post -->
-      <div class="col-sm-12 col-md-4">
-        <div class="card card-blog-post">
-          <div class="card-body">
-            <h5 class="card-title"><a href="#">CrowdAI for ML classes</a></h5>
-            <p class="card-text">29 October 2018</p>
-          </div>
-
-          <div class="card-footer">
-            <a href="#">
-              <img class="avatar" src="assets/img/user-avatar-default.svg"> 
-              <span>By Marcel_Salathé</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <!-- /blog post -->
-
-      <!-- blog post -->
-      <div class="col-sm-12 col-md-4">
-        <div class="card card-blog-post">
-          <div class="card-body">
-            <h5 class="card-title"><a href="#">NIPS, Minecraft, and VizDoom</a></h5>
-            <p class="card-text">29 May 2018</p>
-          </div>
-
-          <div class="card-footer">
-            <a href="#">
-              <img class="avatar" src="assets/img/user-avatar-default.svg"> 
-              <span>By spMohanty</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <!-- /blog post -->
+      <% @selected_blogs.each_with_index do |blog,index| %>
+          <%= render partial: 'blog_post', locals: { blog: blog } %>
+      <% end %>
     </div>
   </div>
   <!-- /blog post previews -->

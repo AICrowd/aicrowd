@@ -468,6 +468,28 @@ if Rails.env == 'development' || Rails.env == 'staging'
       posted_at: Time.now)
 
   Blog.create!(
+      id: 1,
+        participant_id: 1817,
+        title: "Blog number 4",
+        body: "This is a sample blog for testing, it belongs to participant p1817",
+        published: true,
+        vote_count: 2900,
+        view_count: 200000,
+        seq: 2222,
+        posted_at: Time.now)
+
+  Blog.create!(
+      id: 3,
+        participant_id: 1780,
+        title: "Blog number 3",
+        body: "This is a sample blog for testing, it belongs to participant p1780",
+        published: true,
+        vote_count: 291,
+        view_count: 200,
+        seq: 3000,
+        posted_at: Time.now)
+
+  Blog.create!(
     id: 91,
       participant_id: 1051,
       title: "Blog number 2",
