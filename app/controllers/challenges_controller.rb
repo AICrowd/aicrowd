@@ -10,6 +10,11 @@ class ChallengesController < ApplicationController
   respond_to :html, :js
 
   def index
+    if current_participant
+      @challenge_participant = @challenge
+        .challenge_participants
+        .find_by(participant_id: current_participant.id)
+    end    
     @challenge_filter = params[:challenge_filter] ||= 'all'
     @all_challenges = policy_scope(Challenge)
     case @challenge_filter
@@ -55,6 +60,12 @@ class ChallengesController < ApplicationController
   end
 
   def show
+    if current_participant
+      @challenge_participant = @challenge
+        .challenge_participants
+        .find_by(participant_id: current_participant.id)
+    end
+
     if !params[:version]  # dont' record page views on history pages
       @challenge.record_page_view
     end
