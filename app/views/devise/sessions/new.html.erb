@@ -20,15 +20,14 @@
 
           <!-- social log in buttons -->
           <div class="btn-set-social">
-            <button type="button" class="btn btn-facebook btn-block">
-              <img src="/assets/img/icon-facebook.svg">Log in with Facebook
-            </button>
-            <button type="button" class="btn btn-secondary btn-block">
-              <img src="/assets/img/icon-google.svg">Log in with Google
-            </button>
-            <button type="button" class="btn btn-github btn-block">
+            <%= link_to participant_oauth2_generic_omniauth_authorize_path, {class: "btn btn-facebook btn-block"} do%>
+              <img src="/assets/img/icon-facebook.svg">Log in with CrowdAI
+            <% end %>
+
+            <%= link_to participant_github_omniauth_authorize_path, {class: "btn btn-github btn-block"} do%>
               <img src="/assets/img/icon-github.svg">Log in with GitHub
-            </button>
+            <% end %>
+
           </div>
           <!-- /social log in buttons -->
 
@@ -50,13 +49,7 @@
 
         <ul class="list-unstyled">
         <%#= link_to "Sign in with Facebook", participant_facebook_omniauth_authorize_path %>
-        <%= link_to participant_oauth2_generic_omniauth_authorize_path, {class: "btn"} do%>
-          <i class="fa fa-user"></i> Log in with CrowdAI
-        <% end %>
-        <%= link_to participant_github_omniauth_authorize_path, {class: "btn"} do%>
-          <i class="fa fa-github"></i> Log in with GitHub
-        <% end %>
-
+        
           <li><%= link_to "Forgot your password?", new_password_path(resource_name) %></li>
           <li><%= link_to "Account locked?", new_unlock_path(resource_name) %></li>
           <li><%= link_to "Resend account confirmation", new_confirmation_path(resource_name) %></li>
