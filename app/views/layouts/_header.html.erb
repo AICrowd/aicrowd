@@ -28,15 +28,12 @@
           <li class="nav-item">
             <%= link_to 'Blog', blogs_path, {:class=> "nav-link"} %>
           </li>
-          <li class="nav-item">
-            <%= link_to 'Log Out', destroy_participant_session_path, :method => :delete %>
-          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><svg width="16" height="4" xmlns="http://www.w3.org/2000/svg"><path d="M2 0C.9 0 0 .9 0 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM8 0C6.9 0 6 .9 6 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#909293" fill-rule="nonzero"/></svg></a>
             <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="#">Organize a challenge</a>
-              <a class="dropdown-item" href="#">FAQ</a>
-              <a class="dropdown-item" href="#">Contact</a>
+              <%= link_to "Organize a challenge", landing_page_host_path, {class: "dropdown-item"} %>
+              <%= link_to "FAQ", faq_path, {class: "dropdown-item"} %>
+              <%= link_to "Contact", contact_path, {class: "dropdown-item"} %>
             </div>
           </li>
         </ul>
@@ -52,94 +49,24 @@
             <a class="dropdown-item" href="#">Achievements</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Blog</a>
-            <a class="dropdown-item" href="#">Organize a challenge</a>
-            <a class="dropdown-item" href="#">FAQ</a>
-            <a class="dropdown-item" href="#">Contact</a>
+            <%= link_to "Organize a challenge", landing_page_host_path, {class: "dropdown-item"} %>
+            <%= link_to "FAQ", faq_path, {class: "dropdown-item"} %>
+            <%= link_to "Contact", contact_path, {class: "dropdown-item"} %>
           </div>
         </div>
-
-
-        <!-- notifications -->
-        <div class="app-header-notifications">
-          <div class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <img src="assets/img/icon-notifications-active.svg" alt="Notifications">
-            </a>
-            <div class="dropdown-menu dropdown-menu-notifications dropdown-menu-right">
-              <!-- notification -->
-              <a class="dropdown-item dropdown-item-active" href="#">
-                <div class="dropdown-item-img">
-                  <img class="avatar" src="assets/img/user-avatar-2.png">
-                </div> 
-                <div> 
-                  <span><strong>spMohanty</strong> mentioned you in a post</span><br>
-                  <span class="text-muted">10 mins ago</span>
-                </div>
-              </a>
-              <!-- /notification -->
-              <div class="dropdown-divider"></div>
-              <!-- notification -->
-              <a class="dropdown-item dropdown-item-active" href="#">
-                <div class="dropdown-item-img">
-                  <img class="challenge" src="assets/img/card-challenge-1.jpg">
-                </div> 
-                <div> 
-                  <span>Your <strong>Challenge title</strong> submission has been graded with a score of <strong>673.22</strong></span><br>
-                  <span class="text-muted">3 hours ago</span>
-                </div>
-              </a>
-              <!-- /notification -->
-              <div class="dropdown-divider"></div>
-              <!-- notification -->
-              <a class="dropdown-item" href="#">
-                <div class="dropdown-item-img">
-                  <img class="award" src="assets/img/award-gold.svg">
-                </div> 
-                <div> 
-                  <span>You have been awarded the <strong>Top position during challenge: Gold</strong> achievement<br>
-                  <span class="text-muted">Yesterday</span>
-                </div>
-              </a>
-              <!-- /notification -->
-              <div class="dropdown-divider"></div>
-              <!-- notification -->
-              <a class="dropdown-item" href="#">
-                <div class="dropdown-item-img">
-                  <img class="challenge" src="assets/img/card-challenge-2.jpg">
-                </div> 
-                <div> 
-                  <span>You have moved from 3rd place to <strong>2nd place</strong> in the <strong>Challenge title</strong> leaderboard<br>
-                  <span class="text-muted">3 days ago</span>
-                </div>
-              </a>
-              <!-- /notification -->
-              <div class="dropdown-divider"></div>
-              <!-- notification -->
-              <a class="dropdown-item" href="#">
-                <div class="dropdown-item-img">
-                  <img class="avatar" src="assets/img/user-avatar-1.jpg">
-                </div> 
-                <div> 
-                  <span><strong>DYNAMO</strong> mentioned you in a post</span><br>
-                  <span class="text-muted">1 week ago</span>
-                </div>
-              </a>
-              <!-- /notification -->
-            </div>
-          </div>
-        </div>
-        <!-- /notifications -->
 
         <div class="member-options">
           <div class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img class="avatar" src="assets/img/user-avatar-default.svg" alt="Username"></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= concept(Image::Cell, current_participant, klass: "avatar") %></a>
             <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="#"><strong>Username</strong><br>
-              View profile</a>
-              <a class="dropdown-item" href="#">Edit profile</a>
-              <a class="dropdown-item" href="#">Account settings</a>
+              <%= link_to participant_path(current_participant), {class: "dropdown-item"} do %>
+              <strong><%= current_participant.name %></strong><br>
+              View profile
+              <% end %>
+              <%= link_to 'Edit Profile', edit_participant_path(current_participant) , {class: "dropdown-item"} %>
+              <%= link_to 'Account Settings', edit_participant_registration_path, {class: "dropdown-item"} %>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Log out</a>
+              <%= link_to 'Log Out', destroy_participant_session_path, class: "dropdown-item", :method => :delete %>
             </div>
           </div>
         </div>
@@ -154,20 +81,18 @@
           <li class="nav-item">
             <%= link_to 'Challenges', challenges_path, {:class=> "nav-link"} %>
           </li>
-<!--           <li class="nav-item">
-            <a class="nav-link" href="#">Achievements</a>
-          </li> -->
           <li class="nav-item">
             <%= link_to 'Blog', blogs_path, {:class=> "nav-link"} %>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><svg width="16" height="4" xmlns="http://www.w3.org/2000/svg"><path d="M2 0C.9 0 0 .9 0 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM8 0C6.9 0 6 .9 6 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#909293" fill-rule="nonzero"/></svg></a>
             <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="#">Organize a challenge</a>
-              <a class="dropdown-item" href="#">FAQ</a>
-              <a class="dropdown-item" href="#">Contact</a>
+              <%= link_to "Organize a challenge", landing_page_host_path, {class: "dropdown-item"} %>
+              <%= link_to "FAQ", faq_path, {class: "dropdown-item"} %>
+              <%= link_to "Contact", contact_path, {class: "dropdown-item"} %>
+
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Sign up</a>
+              <%= link_to "Sign Up", new_participant_registration_path, {class: "dropdown-item"} %>
             </div>
           </li>
         </ul>
@@ -183,12 +108,12 @@
             <a class="dropdown-item" href="#">Achievements</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Blog</a>
-            <a class="dropdown-item" href="#">Organize a challenge</a>
-            <a class="dropdown-item" href="#">FAQ</a>
-            <a class="dropdown-item" href="#">Contact</a>
+            <%= link_to "Organize a challenge", landing_page_host_path, {class: "dropdown-item"} %>
+            <%= link_to "FAQ", faq_path, {class: "dropdown-item"} %>
+            <%= link_to "Contact", contact_path, {class: "dropdown-item"} %>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Log in</a>
-            <a class="dropdown-item" href="#">Sign up</a>
+            <%= link_to "Sign Up", new_participant_registration_path, {class: "dropdown-item"} %>
           </div>
         </div>
 
@@ -200,78 +125,3 @@
       <% end %>
     </div>
 </header>
-
-
-<!-- <header>
-  <div class="row">
-    <div class="branding">
-      <a class="logo" href="/" title=""></a>
-    </div>
-    <% if current_participant %>
-      <div class="user">
-        <a id='toggle-user' href='#'><%= concept(Image::Cell, current_participant) %></a>
-        <div id="user-container">
-          <ul>
-            <li><%= link_to current_participant.name, participant_path(current_participant) %></li>
-            <li><%= link_to 'Profile', edit_participant_path(current_participant) %></li>
-            <li><%= link_to 'Account Settings', edit_participant_registration_path %></li>
-            <li><%= link_to 'Log Out', destroy_participant_session_path, :method => :delete %></li>
-          </ul>
-        </div>
-      </div>
-    <% end %>
-    <nav class="primary">
-      <ul>
-        <li><%= link_to 'Challenges', challenges_path %></li>
-        <li><%= link_to 'Knowledge Base', articles_path %></li>
-        <li><%= link_to 'Job Board', job_postings_path %></li>
-        <% if current_participant && current_participant.admin? %>
-          <li data-turbolinks='false'><%= link_to "Admin", '/admin' %></li>
-        <% end %>
-        <% if current_participant.nil? %>
-          <li><%= link_to "Sign up", new_participant_registration_path %></li>
-          <li><%= link_to "Log in", new_participant_session_path %></li>
-        <% end %>
-      </ul>
-    </nav>
-    <div class="menu">
-      <a id="mobile-nav" href="#">
-        <i class="fa fa-bars fa-lg" aria-hidden="true"></i>
-      </a>
-    </div>
-  </div>
-  <nav class="mobile-primary">
-    <div id="mobile-nav-header">
-      <div class="row">
-        <a class="logo" href="#" title=""></a>
-        <a id="mobile-nav" href="#">
-          <i class="fa fa-times fa-lg" aria-hidden="true"></i>
-        </a>
-      </div>
-    </div>
-    <ul>
-      <li><h3><%= link_to 'Challenges', challenges_path %></h3></li>
-      <li><h3><%= link_to 'Knowledge Base', articles_path %></h3></li>
-      <li><h3><%= link_to 'Job Board', job_postings_path %></h3></li>
-    </ul>
-    <% if current_participant %>
-      <ul>
-        <li><h4><%= link_to current_participant.name, participant_path(current_participant) %></h4></li>
-        <li><h4><%= link_to 'Profile', edit_participant_path(current_participant) %></h4></li>
-        <li><h4><%= link_to 'Account Settings', edit_participant_registration_path %></h4></li>
-        <li><h4><%= link_to 'Log Out', destroy_participant_session_path, :method => :delete %></h4></li>
-      </ul>
-    <% else %>
-      <ul>
-        <li>
-          <h4><%= link_to "Sign up", new_participant_registration_path %></h4>
-        </li>
-        <li>
-          <h4><%= link_to "Log in", new_participant_session_path %></h4>
-        </li>
-      </ul>
-    <% end %>
-  </nav>
-  <%= render 'cookies_eu/consent_banner', link: '/cookies', target: '_blank' %>
-</header>
- -->
