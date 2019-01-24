@@ -97,6 +97,3 @@ document.addEventListener("turbolinks:load", function() {
 });
 
 
-// -------------------- Views ------------------- //
-
-//= require views/index
