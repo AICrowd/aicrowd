@@ -25,14 +25,13 @@ before_script:
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-  - docker pull localstack/localstack
   - docker run -d -p 4572:4572 localstack/localstack
   - mkdir ~/fog
   - sleep 10 # give xvfb and localstack some time to start
 
 script:
-  - bundle exec rake db:migrate
-  - bundle exec rake spec
+  - bundle exec rake db:migrate --trace
+  - bundle exec rake spec --trace
 
 branches:
   only:
