@@ -157,7 +157,7 @@ Rails.application.routes.draw do
   match '/terms',   to: 'pages#terms',   via: :get
   match '/faq',     to: 'pages#faq',     via: :get
   match '/cookies', to: 'pages#cookies_info', via: :get
-  match '/migration', to: 'crowdai_migration#index', via: :get
+  match '/migrate_old_user', to: 'crowdai_migration#index', via: :get
 
 
   resources :markdown_editors, only: [:index, :create] do

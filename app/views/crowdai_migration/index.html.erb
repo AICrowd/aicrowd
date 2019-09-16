@@ -1,4 +1,5 @@
-<p>Do you already have an AICrowd account?</p>
+<%  MigrateUserService.new(crowdai_id: params[:migration_id], aicrowd_id: current_participant.id) %>
 
-<%= link_to 'Yes', new_participant_session_path %>
-<%= link_to 'No', new_participant_registration_path %>
+<%= @encrypt_data %>
+<%= @decrypt_data %>
+Migration Successful!!
