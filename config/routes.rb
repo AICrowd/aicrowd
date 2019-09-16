@@ -117,6 +117,7 @@ Rails.application.routes.draw do
   end
   get '/load_more_challenges', to: 'challenges#load_more', as: :load_more_challenges
 
+
   resources :dataset_files, only: [] do
     resources :dataset_file_downloads, only: [:create]
   end
@@ -156,6 +157,7 @@ Rails.application.routes.draw do
   match '/terms',   to: 'pages#terms',   via: :get
   match '/faq',     to: 'pages#faq',     via: :get
   match '/cookies', to: 'pages#cookies_info', via: :get
+  match '/migration', to: 'crowdai_migration#index', via: :get
 
 
   resources :markdown_editors, only: [:index, :create] do

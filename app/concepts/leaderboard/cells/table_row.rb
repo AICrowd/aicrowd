@@ -40,7 +40,7 @@ class Leaderboard::Cell::TableRow < Leaderboard::Cell
   end
 
   def participant
-    @participant ||= entry.participant
+    @participant ||= entry.participant ||= nil
   end
 
   def top_rows

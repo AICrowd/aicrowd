@@ -1,33 +1,33 @@
 if Rails.env == 'development' || Rails.env == 'staging'
 
-  SuccessStory.destroy_all
-  DatasetFile.destroy_all
-  SubmissionComment.destroy_all
-  ChallengeCallResponse.destroy_all
-  ChallengeCall.destroy_all
-  Comment.destroy_all
-  Topic.destroy_all
-  JobPosting.destroy_all
-  Blog.destroy_all
-  Submission.destroy_all
-  Partner.destroy_all
-  Topic.destroy_all
-  ChallengeParticipant.destroy_all
-  Participant.destroy_all
-  BaseLeaderboard.destroy_all
-  ChallengeRound.destroy_all
-  Challenge.destroy_all
-  Partner.destroy_all
-  Organizer.destroy_all
-
-  Participant.create!(
-      id: 2,
-      email: 'admin@example.com',
-      password: 'password',
-      password_confirmation: 'password',
-      admin: true,
-      name: 'adminuser',
-      confirmed_at: Time.now)
+  # SuccessStory.destroy_all
+  # DatasetFile.destroy_all
+  # SubmissionComment.destroy_all
+  # ChallengeCallResponse.destroy_all
+  # ChallengeCall.destroy_all
+  # Comment.destroy_all
+  # Topic.destroy_all
+  # JobPosting.destroy_all
+  # Blog.destroy_all
+  # Submission.destroy_all
+  # Partner.destroy_all
+  # Topic.destroy_all
+  # ChallengeParticipant.destroy_all
+  # Participant.destroy_all
+  # BaseLeaderboard.destroy_all
+  # ChallengeRound.destroy_all
+  # Challenge.destroy_all
+  # Partner.destroy_all
+  # Organizer.destroy_all
+  #
+  # Participant.create!(
+  #     id: 2,
+  #     email: 'admin@example.com',
+  #     password: 'password',
+  #     password_confirmation: 'password',
+  #     admin: true,
+  #     name: 'adminuser',
+  #     confirmed_at: Time.now)
 
   # # Users
   # participant_ids =
@@ -849,98 +849,98 @@ if Rails.env == 'development' || Rails.env == 'staging'
   # {id: 12990, challenge_id: 37, participant_id: 7420, score: nil, created_at: "2018-08-11 08:38:59", updated_at: "2018-08-11 08:39:04", score_secondary: nil, grading_status_cd: "failed", description_markdown: "", post_challenge: false, challenge_round_id: 52, score_display: nil, score_secondary_display: nil, baseline: false, baseline_comment: nil},
   # {id: 12994, challenge_id: 37, participant_id: 1235, score: 30581.9166792, created_at: "2018-08-11 09:27:50", updated_at: "2018-08-11 09:28:50", score_secondary: 0.0, grading_status_cd: "graded", description_markdown: "", post_challenge: false, challenge_round_id: 52, score_display: 30581.917, score_secondary_display: 2.0, baseline: false, baseline_comment: nil},
 
-  organizers = JSON.parse(File.read('/home/sphinx/Work/organizers.json'))
-  organizers['organizers'].each do |organizer|
-    Organizer.create!([
-                          {id: organizer['id'] + 100,
-                           tagline: "sddsd",
-                           organizer: organizer['organizer']
-                          }])
-  end
-
-  challenges = JSON.parse(File.read('/home/sphinx/Work/challenges.json'))
-  challenges['challenges'].each do |challenge|
-    Challenge.create!([
-                          {id: challenge['id'] + 100,
-                           organizer_id: challenge['organizer_id'] + 100,
-                           challenge: challenge['challenge'],
-                           prize_cash: "",
-                           prize_academic: "",
-                           prize_misc: "",
-                           status_cd: challenge['status_cd'],
-                           tagline: challenge['tagline'],
-                           primary_sort_order_cd: challenge['primary_sort_order_cd'],
-                           secondary_sort_order_cd: challenge['secondary_sort_order_cd'],
-                           perpetual_challenge: challenge['perpetual_challenge'],
-                           page_views: challenge['page_views'],
-                           participant_count: challenge['participant_count'],
-                           submission_count: challenge['submission_count'],
-                           score_title: challenge['score_title'],
-                           score_secondary_title: challenge['score_secondary_title'],
-                           slug: challenge['slug'],
-                           submission_license: challenge['submission_license'],
-                           api_required: challenge['api_required'],
-                           media_on_leaderboard: challenge['media_on_leaderboard'],
-                           challenge_client_name: challenge['challenge_client_name'],
-                           description_markdown: challenge['description_markdown']
-                          }])
-  end
-
-
-  challenge_rounds = JSON.parse(File.read('/home/sphinx/Work/challenge_rounds.json'))
-  challenge_rounds['challenge_rounds'].each do |challenge_round|
-    if Challenge.exists?(challenge_round['challenge_id'] + 100) then
-      ChallengeRound.create!([
-                                 {
-                                     id: challenge_round['id'] + 100,
-                                     submission_limit: 5,
-                                     submission_limit_period: :day,
-                                     challenge_id: challenge_round['challenge_id'] + 100,
-                                     challenge_round: challenge_round['challenge_round'],
-                                     active: challenge_round['active']}
-                             ])
-    end
-  end
-  submissions = JSON.parse(File.read('/home/sphinx/Work/submissions.json'))
-  submissions['submissions'].each do |submission|
-    if Challenge.exists?(submission['challenge_id'] + 100) and ChallengeRound.exists?(submission['challenge_round_id'] + 100) then
-      temp = Submission.create!({participant_id: nil,
-                                 challenge_id: submission['challenge_id'] + 100,
-                                 grading_status: :graded,
-                                 challenge_round_id: submission['challenge_round_id'] + 100,
-                                 score: submission['score'],
-                                 created_at: submission['created_at'],
-                                 updated_at: submission['updated_at'],
-                                 baseline: false,
-                                 score_secondary: submission['score_secondary'],
-                                 description_markdown: submission['description_markdown']
-                                })
-
-      MigrationMapping.create!([
-                                   {source_type: 'Submission',
-                                    source_id: temp['id'],
-                                    crowdai_participant_id: submission['participant_id']}
-                               ])
-    end
-  end
-
-  challenge_participants = JSON.parse(File.read('/home/sphinx/Work/challenge_participants.json'))
-  challenge_participants['challenge_participants'].each do |challenge_participant|
-    if Challenge.exists?(challenge_participant['challenge_id'] + 100) then
-      cp = ChallengeParticipant.create!({challenge_id: 100 + challenge_participant['challenge_id'],
-                                         participant_id: nil,
-                                         name: "Unknown User",
-                                         email: challenge_participant['email'],
-                                         registered: challenge_participant['registered'],
-                                         accepted_dataset_toc: challenge_participant['accepted_dataset_toc']})
-
-      MigrationMapping.create!(
-          source_type: 'ChallengeParticipant',
-          source_id: cp['id'],
-          crowdai_participant_id: challenge_participant['participant_id']
-      )
-    end
-  end
+  # organizers = JSON.parse(File.read('/home/sphinx/Work/organizers.json'))
+  # organizers['organizers'].each do |organizer|
+  #   Organizer.create!([
+  #                         {id: organizer['id'] + 100,
+  #                          tagline: "sddsd",
+  #                          organizer: organizer['organizer']
+  #                         }])
+  # end
+  #
+  # challenges = JSON.parse(File.read('/home/sphinx/Work/challenges.json'))
+  # challenges['challenges'].each do |challenge|
+  #   Challenge.create!([
+  #                         {id: challenge['id'] + 100,
+  #                          organizer_id: challenge['organizer_id'] + 100,
+  #                          challenge: challenge['challenge'],
+  #                          prize_cash: "",
+  #                          prize_academic: "",
+  #                          prize_misc: "",
+  #                          status_cd: challenge['status_cd'],
+  #                          tagline: challenge['tagline'],
+  #                          primary_sort_order_cd: challenge['primary_sort_order_cd'],
+  #                          secondary_sort_order_cd: challenge['secondary_sort_order_cd'],
+  #                          perpetual_challenge: challenge['perpetual_challenge'],
+  #                          page_views: challenge['page_views'],
+  #                          participant_count: challenge['participant_count'],
+  #                          submission_count: challenge['submission_count'],
+  #                          score_title: challenge['score_title'],
+  #                          score_secondary_title: challenge['score_secondary_title'],
+  #                          slug: challenge['slug'],
+  #                          submission_license: challenge['submission_license'],
+  #                          api_required: challenge['api_required'],
+  #                          media_on_leaderboard: challenge['media_on_leaderboard'],
+  #                          challenge_client_name: challenge['challenge_client_name'],
+  #                          description_markdown: challenge['description_markdown']
+  #                         }])
+  # end
+  #
+  #
+  # challenge_rounds = JSON.parse(File.read('/home/sphinx/Work/challenge_rounds.json'))
+  # challenge_rounds['challenge_rounds'].each do |challenge_round|
+  #   if Challenge.exists?(challenge_round['challenge_id'] + 100) then
+  #     ChallengeRound.create!([
+  #                                {
+  #                                    id: challenge_round['id'] + 100,
+  #                                    submission_limit: 5,
+  #                                    submission_limit_period: :day,
+  #                                    challenge_id: challenge_round['challenge_id'] + 100,
+  #                                    challenge_round: challenge_round['challenge_round'],
+  #                                    active: challenge_round['active']}
+  #                            ])
+  #   end
+  # end
+  # submissions = JSON.parse(File.read('/home/sphinx/Work/submissions.json'))
+  # submissions['submissions'].each do |submission|
+  #   if Challenge.exists?(submission['challenge_id'] + 100) and ChallengeRound.exists?(submission['challenge_round_id'] + 100) then
+  #     temp = Submission.create!({participant_id: nil,
+  #                                challenge_id: submission['challenge_id'] + 100,
+  #                                grading_status: :graded,
+  #                                challenge_round_id: submission['challenge_round_id'] + 100,
+  #                                score: submission['score'],
+  #                                created_at: submission['created_at'],
+  #                                updated_at: submission['updated_at'],
+  #                                baseline: false,
+  #                                score_secondary: submission['score_secondary'],
+  #                                description_markdown: submission['description_markdown']
+  #                               })
+  #
+  #     MigrationMapping.create!([
+  #                                  {source_type: 'Submission',
+  #                                   source_id: temp['id'],
+  #                                   crowdai_participant_id: submission['participant_id']}
+  #                              ])
+  #   end
+  # end
+  #
+  # challenge_participants = JSON.parse(File.read('/home/sphinx/Work/challenge_participants.json'))
+  # challenge_participants['challenge_participants'].each do |challenge_participant|
+  #   if Challenge.exists?(challenge_participant['challenge_id'] + 100) then
+  #     cp = ChallengeParticipant.create!({challenge_id: 100 + challenge_participant['challenge_id'],
+  #                                        participant_id: nil,
+  #                                        name: "Unknown User",
+  #                                        email: challenge_participant['email'],
+  #                                        registered: challenge_participant['registered'],
+  #                                        accepted_dataset_toc: challenge_participant['accepted_dataset_toc']})
+  #
+  #     MigrationMapping.create!(
+  #         source_type: 'ChallengeParticipant',
+  #         source_id: cp['id'],
+  #         crowdai_participant_id: challenge_participant['participant_id']
+  #     )
+  #   end
+  # end
 
 
   ChallengeRound.all.each do |challenge_round|
@@ -948,23 +948,23 @@ if Rails.env == 'development' || Rails.env == 'staging'
   end
 
 
-  def migrate_user(old_id, new_id)
-
-    submission_migration_mappings = MigrationMapping.where(:crowdai_participant_id => old_id, :source_type => 'Submission')
-    submission_migration_mappings.each do |migration_mapping|
-      submission = Submission.where(id: migration_mapping['source_id'])
-      submission.update(participant_id: new_id)
-    end
-
-    cp_migration_mappings = MigrationMapping.where(:crowdai_participant_id => old_id, :source_type => 'ChallengeParticipant')
-    cp_migration_mappings.each do |migration_mapping|
-      cp = ChallengeParticipant.where(id: migration_mapping['source_id'])
-      cp.update(participant_id: new_id)
-    end
-  end
-
-  migrate_user(6645, 2)
-  migrate_user(2041, 2)
+  # def migrate_user(old_id, new_id)
+  #
+  #   submission_migration_mappings = MigrationMapping.where(:crowdai_participant_id => old_id, :source_type => 'Submission')
+  #   submission_migration_mappings.each do |migration_mapping|
+  #     submission = Submission.where(id: migration_mapping['source_id'])
+  #     submission.update(participant_id: new_id)
+  #   end
+  #
+  #   cp_migration_mappings = MigrationMapping.where(:crowdai_participant_id => old_id, :source_type => 'ChallengeParticipant')
+  #   cp_migration_mappings.each do |migration_mapping|
+  #     cp = ChallengeParticipant.where(id: migration_mapping['source_id'])
+  #     cp.update(participant_id: new_id)
+  #   end
+  # end
+  #
+  # migrate_user(6645, 2)
+  # migrate_user(2041, 2)
 
 end
 
