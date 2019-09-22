@@ -1,5 +1,9 @@
-<%  MigrateUserService.new(crowdai_id: params[:migration_id], aicrowd_id: current_participant.id) %>
-
-<%= @encrypt_data %>
-<%= @decrypt_data %>
-Migration Successful!!
+<% if @error.nil? %>
+  <%  MigrateUserService.new(crowdai_id: @decrypted_string, aicrowd_id: current_participant.id) %>
+  <%#= @decrypted_string %>
+  <%= @data_1 %>
+  <%= @data_2 %>
+  <!--  Migration Successful !!-->
+<% else %>
+  <%= @error %>
+<% end %>

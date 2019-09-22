@@ -1,10 +1,7 @@
 class MigrateUserService
 
   def initialize(crowdai_id:, aicrowd_id:)
-    @crowdai_id = crowdai_id
-    @aicrowd_id = aicrowd_id
-
-    migrate_user(@crowdai_id, @aicrowd_id)
+    migrate_user(crowdai_id, aicrowd_id)
   end
 
   def migrate_user(old_id, new_id)
@@ -19,6 +16,11 @@ class MigrateUserService
       cp = ChallengeParticipant.where(id: migration_mapping['source_id'])
       cp.update(participant_id: new_id)
     end
+
+    MigrationLog.create!(
+        crowdai_participant_id: old_id,
+        aicrowd_participant_id: new_id
+    )
   end
 
 end

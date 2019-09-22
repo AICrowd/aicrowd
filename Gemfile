@@ -101,6 +101,8 @@ gem 'uglifier', '~> 4.1.10'
 gem 'validate_url'
 gem 'valid_email2'
 gem 'webpacker', '~> 2.0'
+gem 'therubyracer'
+gem 'execjs'
 
 group :development do
   gem 'brakeman', :require => false

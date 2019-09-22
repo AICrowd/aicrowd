@@ -934,18 +934,18 @@ if Rails.env == 'development' || Rails.env == 'staging'
   #                                        registered: challenge_participant['registered'],
   #                                        accepted_dataset_toc: challenge_participant['accepted_dataset_toc']})
   #
-  #     MigrationMapping.create!(
-  #         source_type: 'ChallengeParticipant',
-  #         source_id: cp['id'],
-  #         crowdai_participant_id: challenge_participant['participant_id']
-  #     )
+      # MigrationMapping.create!(
+      #     source_type: 'ChallengeParticipant',
+      #     source_id: cp['id'],
+      #     crowdai_participant_id: challenge_participant['participant_id']
+      # )
   #   end
   # end
 
 
-  ChallengeRound.all.each do |challenge_round|
-    CalculateLeaderboardService.new(challenge_round_id: challenge_round['id']).call
-  end
+  # ChallengeRound.all.each do |challenge_round|
+  #   CalculateLeaderboardService.new(challenge_round_id: challenge_round['id']).call
+  # end
 
 
   # def migrate_user(old_id, new_id)
@@ -965,6 +965,18 @@ if Rails.env == 'development' || Rails.env == 'staging'
   #
   # migrate_user(6645, 2)
   # migrate_user(2041, 2)
+  #
+
+  public_key_file = "/home/sphinx/.ssh/pem"
+  @public_key = OpenSSL::PKey::RSA.new(File.read(public_key_file))
+
+  CSV.open("file.csv", "wb") do |csv|
+    csv << ["Hashes", "Crowdai_participant_id"]
+    MigrationMapping.all.each do |migration_mapping|
+      csv << [Base64.encode64(@public_key.public_encrypt(migration_mapping.crowdai_participant_id.to_s)), migration_mapping.crowdai_participant_id]
+      # puts migration_mapping.crowdai_participant_id.to_s
+    end
+  end
 
 end
 
