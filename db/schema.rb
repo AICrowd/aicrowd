@@ -1487,7 +1487,7 @@ ActiveRecord::Schema.define(version: 2019_09_30_032348) do
     WHERE ((base_leaderboards.leaderboard_type_cd)::text = 'ongoing'::text);
   SQL
 
-  create_view "previous_leaderboards",  sql_definition: <<-SQL 
+  create_view "previous_leaderboards",  sql_definition: <<-SQL
       SELECT base_leaderboards.id,
       base_leaderboards.challenge_id,
       base_leaderboards.challenge_round_id,

@@ -157,6 +157,11 @@ class CalculateLeaderboardService
       SELECT * FROM team_participants tp INNER JOIN teams t ON tp.team_id = t.id where t.challenge_id = #{@round.challenge.id}
     SQL
 
+    relevant_old_participants = <<~SQL
+      SELECT * FROM migration_mappings mm INNER JOIN submissions s ON mm.source_id = s.id WHERE mm.source_type = "Submission" AND s.challenge_round_id = #{@round.id} AND s.created_at <= #{cuttoff_dttm}
+        AND s.baseline IS FALSE
+    SQL
+
     # associate relevant submissions with their submitter
     @conn.execute <<~SQL
       INSERT INTO temp_submission_stats
@@ -173,6 +178,13 @@ class CalculateLeaderboardService
         AND s.created_at <= #{cuttoff_dttm}
         AND s.baseline IS FALSE
       ORDER BY submission_id;
+    SQL
+
+    @conn.execute <<~SQL
+      INSERT INTO temp_submission_stats
+      SELECT mm.source_id, 'OldParticipant', mm.crowdai_participant_id
+      FROM (#{relevant_old_participants}) mm
+      ORDER BY mm.source_id;
     SQL
 
     # record number of entries for each submitter
