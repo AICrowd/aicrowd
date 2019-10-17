@@ -701,6 +701,14 @@ ActiveRecord::Schema.define(version: 2019_09_30_032348) do
     t.index ["sash_id"], name: "index_merit_scores_on_sash_id"
   end
 
+  create_table "migration_mappings", force: :cascade do |t|
+    t.string "source_type"
+    t.integer "source_id"
+    t.integer "crowdai_participant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.bigint "participant_id"
     t.string "notification_type"
@@ -1479,7 +1487,7 @@ ActiveRecord::Schema.define(version: 2019_09_30_032348) do
     WHERE ((base_leaderboards.leaderboard_type_cd)::text = 'ongoing'::text);
   SQL
 
-  create_view "previous_leaderboards",  sql_definition: <<-SQL
+  create_view "previous_leaderboards",  sql_definition: <<-SQL 
       SELECT base_leaderboards.id,
       base_leaderboards.challenge_id,
       base_leaderboards.challenge_round_id,

@@ -22,6 +22,8 @@ class Organizer < ApplicationRecord
     presence: true
   after_create :set_api_key
 
+  has_many :migration_mappings, as: :source
+
   def approved?
     self.approved
   end
