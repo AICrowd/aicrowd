@@ -22,15 +22,17 @@ class Follow::Cell < Template::Cell
   end
 
   def refresh
-    #{}%{ console.log("#{j(show)}")}
+    # {}%{ console.log("#{j(show)}")}
     %{ $('##{follow_link_id}').replaceWith("#{j(show)}"); }
   end
 
   def participant_followed?
     return false if current_participant.nil?
+
     follow = followable.follows.where(participant_id: current_participant.id).first
     return true if follow.present?
-    return false
+
+    false
   end
 
   def upfollow_link

@@ -1,5 +1,5 @@
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 
 require 'spec_helper'
 require 'pundit/matchers'
@@ -15,7 +15,7 @@ Dir[File.dirname(__FILE__) + "/support/matchers/*.rb"]
   .each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
-browser = ENV['CAPYBARA_BROWSER_NAME'] && ENV['CAPYBARA_BROWSER_NAME'].to_sym || :chrome
+browser = ENV['CAPYBARA_BROWSER_NAME']&.to_sym || :chrome
 Capybara.register_driver :selenium do |app|
   Capybara::Selenium::Driver.new(app, browser: browser)
 end
@@ -42,7 +42,7 @@ end
 RSpec.configure do |config|
   Capybara.reset_sessions!
 
-  #config.filter_run :focus => true
+  # config.filter_run :focus => true
   config.include FactoryBot::Syntax::Methods
   config.infer_spec_type_from_file_location!
 
@@ -69,9 +69,7 @@ RSpec.configure do |config|
   # callback to be run between retries
   config.retry_callback = proc do |ex|
     # run some additional clean up task - can be filtered by example metadata
-    if ex.metadata[:js]
-      Capybara.reset!
-    end
+    Capybara.reset! if ex.metadata[:js]
   end
   ## RSPEC RETRY END
 
@@ -80,42 +78,42 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
-    begin
-      FactoryBot.lint
-      DatabaseCleaner.clean_with(:truncation)
-      DatabaseCleaner.start
-    ensure
-      DatabaseCleaner.clean
-    end
+
+    FactoryBot.lint
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.start
+  ensure
+    DatabaseCleaner.clean
+
   end
 
-  config.before(:each) do
+  config.before do
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before(:each, :js => true) do
+  config.before(:each, js: true) do
     DatabaseCleaner.strategy = :truncation
   end
 
   ### TODO: NATE: understand why this config block is necessary locally
   ### but not on build server.  Am I missing an environment variable?
   ### See discussion here: https://stackoverflow.com/questions/598933/how-do-i-change-the-default-www-example-com-domain-for-testing-in-rails
-  config.before(:each) do
+  config.before do
     @request && @request.host = 'localhost'
   end
 
-  config.around(:each) do |example|
+  config.around do |example|
     DatabaseCleaner.cleaning do
       example.run
     end
   end
 
   # Fixes Timecop’s issue (https://goo.gl/1tujRj)
-  #config.around(:each, freeze_time: true) do |example|
+  # config.around(:each, freeze_time: true) do |example|
   #  Timecop.freeze(Time.zone.now.change(nsec: 0))
   #  example.run
   #  Timecop.return
-  #end
+  # end
 
   config.example_status_persistence_file_path = 'spec/examples.txt'
 end

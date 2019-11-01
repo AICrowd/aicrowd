@@ -1,7 +1,7 @@
 class MemberPolicy < ApplicationPolicy
 
   def index?
-    participant && participant.admin? || participant && @record.id == participant.organizer_id
+    participant&.admin? || participant && @record.id == participant.organizer_id
   end
 
   def show?
@@ -28,7 +28,6 @@ class MemberPolicy < ApplicationPolicy
     index?
   end
 
-
   class Scope
     attr_reader :participant, :scope
 
@@ -38,10 +37,10 @@ class MemberPolicy < ApplicationPolicy
     end
 
     def resolve
-      if participant && participant.admin?
+      if participant&.admin?
         scope.all
       else
-        if participant && participant.organizer_id
+        if participant&.organizer_id
           scope.where("id = ?", participant.organizer_id)
         else
           scope.none

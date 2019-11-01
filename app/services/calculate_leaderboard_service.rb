@@ -35,7 +35,7 @@ class CalculateLeaderboardService
       end
     end
     now = Time.zone.now
-    Rails.logger.info "Calculated leaderboard for round #{@round.id} in #{'%0.3f' % (now - start_time).to_f}s."
+    Rails.logger.info "Calculated leaderboard for round #{@round.id} in #{format('%0.3f', (now - start_time).to_f)}s."
     true
   end
 
@@ -56,13 +56,13 @@ class CalculateLeaderboardService
       .limit(1)
       .first
     window_border = most_recent.created_at - @round.ranking_window.hours
-    return "'#{window_border.to_s(:db)}'"
+    "'#{window_border.to_s(:db)}'"
   end
 
   def get_order_by
     challenge = @round.challenge
-    if (challenge.secondary_sort_order_cd.blank? || challenge.secondary_sort_order_cd == 'not_used')
-        return "score_display #{sort_map(challenge.primary_sort_order_cd)}"
+    if challenge.secondary_sort_order_cd.blank? || challenge.secondary_sort_order_cd == 'not_used'
+      return "score_display #{sort_map(challenge.primary_sort_order_cd)}"
     else
       return "score_display #{sort_map(challenge.primary_sort_order_cd)}, score_secondary_display #{sort_map(challenge.secondary_sort_order_cd)}"
     end
@@ -71,20 +71,19 @@ class CalculateLeaderboardService
   # TODO refactor this out
   def get_base_order_by
     challenge = @round.challenge
-    if (challenge.secondary_sort_order_cd.blank? || challenge.secondary_sort_order_cd == 'not_used')
-        return "score #{sort_map(challenge.primary_sort_order_cd)}"
+    if challenge.secondary_sort_order_cd.blank? || challenge.secondary_sort_order_cd == 'not_used'
+      return "score #{sort_map(challenge.primary_sort_order_cd)}"
     else
       return "score #{sort_map(challenge.primary_sort_order_cd)}, score_secondary #{sort_map(challenge.secondary_sort_order_cd)}"
     end
   end
+
   def sort_map(sort_field)
     case sort_field
     when 'ascending'
-      return 'asc'
+      'asc'
     when 'descending'
-      return 'desc'
-    else
-      return nil
+      'desc'
     end
   end
 
@@ -120,7 +119,7 @@ class CalculateLeaderboardService
       post_challenge = '(TRUE,FALSE)'
       cuttoff_dttm = window_border_dttm
     end
-    return [post_challenge,cuttoff_dttm]
+    [post_challenge, cuttoff_dttm]
   end
 
   def init_temp_submission_stats

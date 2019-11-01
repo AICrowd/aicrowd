@@ -4,6 +4,7 @@ ActiveAdmin.register JobPosting do
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end
+
     def permitted_params
       params.permit!
     end
@@ -35,9 +36,9 @@ ActiveAdmin.register JobPosting do
       f.input :title
       f.input :organisation
       f.input :status,
-        as: :select,
-        collection:  enum_option_pairs(JobPosting, :status),
-        include_blank: false
+              as: :select,
+              collection: enum_option_pairs(JobPosting, :status),
+              include_blank: false
       f.input :contact_email
       f.input :contact_phone
       f.input :contact_name
@@ -68,7 +69,5 @@ ActiveAdmin.register JobPosting do
       row :updated_at
     end
   end
-
-
 
 end

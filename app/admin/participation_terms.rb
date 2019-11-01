@@ -1,6 +1,6 @@
 ActiveAdmin.register ParticipationTerms do
   controller do
-    actions :all, except: [:edit,:destroy]
+    actions :all, except: [:edit, :destroy]
     def permitted_params
       params.permit!
     end

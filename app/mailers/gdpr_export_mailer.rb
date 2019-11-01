@@ -18,7 +18,7 @@ class GdprExportMailer < ApplicationMailer
   end
 
   def email_body
-    %Q[
+    %(
       <div>
         <h3>Your requested AIcrowd data</h3>
         <p>
@@ -29,27 +29,27 @@ class GdprExportMailer < ApplicationMailer
         </p>
         <br/>
       </div>
-    ]
+    )
   end
 
-  def format_options(participant:,body:,csv_file:)
+  def format_options(participant:, body:, csv_file:)
     options = {
-      participant_id:   participant.id,
-      subject:          "[AIcrowd] Personal Data download",
-      to:               participant.email,
-      template:         "AIcrowd General Template",
+      participant_id: participant.id,
+      subject: "[AIcrowd] Personal Data download",
+      to: participant.email,
+      template: "AIcrowd General Template",
       global_merge_vars: [
         {
-          name:           'NAME',
-          content:        "#{participant.name}"
+          name: 'NAME',
+          content: participant.name.to_s
         },
         {
-          name:           'BODY',
-          content:        body
+          name: 'BODY',
+          content: body
         },
         {
-          name:           'EMAIL_PREFERENCES_LINK',
-          content:        " "
+          name: 'EMAIL_PREFERENCES_LINK',
+          content: " "
         }
       ],
       attachments: [
@@ -66,19 +66,19 @@ class GdprExportMailer < ApplicationMailer
     CSV.generate(force_quotes: true) do |csv|
       GDPR_FIELDS.each do |rec|
         csv << [rec[:table]]
-        rows(rec: rec,participant_id: participant_id).each do |row|
+        rows(rec: rec, participant_id: participant_id).each do |row|
           csv << row
         end
       end
     end
   end
 
-  def rows(rec:,participant_id:)
+  def rows(rec:, participant_id:)
     query = "#{query(rec: rec, participant_id: participant_id)}.pluck('#{plucked(rec: rec)}')"
     eval(query)
   end
 
-  def query(rec:,participant_id:)
+  def query(rec:, participant_id:)
     "#{rec[:table]}.where(#{rec[:id_field]}: #{participant_id})"
   end
 

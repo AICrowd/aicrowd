@@ -15,9 +15,7 @@ class Image::Cell < Template::Cell
   def image_url
     if model&.image_file
       image_url = model.image_file.url
-      if image_url.nil?
-        image_url = default_image_url
-      end
+      image_url = default_image_url if image_url.nil?
     else
       image_url = default_image_url
     end

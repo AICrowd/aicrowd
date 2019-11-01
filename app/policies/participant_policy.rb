@@ -57,10 +57,10 @@ class ParticipantPolicy < ApplicationPolicy
     end
 
     def resolve
-      if participant && participant.admin?
+      if participant&.admin?
         scope.all
       else
-        if participant && participant.id
+        if participant&.id
           scope.where("id = ?", participant.id)
         else
           scope.none

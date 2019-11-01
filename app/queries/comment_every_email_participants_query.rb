@@ -12,7 +12,7 @@ class CommentEveryEmailParticipantsQuery
   # (participant made a comment on one of the comments in the thread OR
   #  participant follows the challenge which has the comment)
   def sql
-    %Q[
+    %[
       SELECT p.participant_id AS id
         FROM comments c,
              email_preferences p,

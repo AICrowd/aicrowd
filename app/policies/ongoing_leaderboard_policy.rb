@@ -18,9 +18,7 @@ class OngoingLeaderboardPolicy < LeaderboardPolicy
         email = nil
         participant_team_ids = nil
       end
-      if participant_team_ids.present?
-        team_check = "OR (submitter_type = 'Team' AND submitter_id IN (#{participant_team_ids}))"
-      end
+      team_check = "OR (submitter_type = 'Team' AND submitter_id IN (#{participant_team_ids}))" if participant_team_ids.present?
       <<~SQL
         (submitter_type = 'Participant' AND submitter_id = #{participant_id})
         #{team_check}
@@ -44,11 +42,11 @@ class OngoingLeaderboardPolicy < LeaderboardPolicy
     end
 
     def resolve
-      if participant && participant.admin?
+      if participant&.admin?
         scope.all
       else
-        if participant && participant.organizer_id
-          sql = %Q[
+        if participant&.organizer_id
+          sql = %[
             #{participant_sql(participant)}
             OR challenge_id IN
               (SELECT c.id

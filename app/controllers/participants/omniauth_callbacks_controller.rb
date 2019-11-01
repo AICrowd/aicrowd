@@ -8,7 +8,7 @@ class Participants::OmniauthCallbacksController < Devise::OmniauthCallbacksContr
     puts request.env["omniauth.auth"]
     @user = Participant.from_omniauth(request.env["omniauth.auth"])
     if @user.persisted?
-      if(!@user.confirmed?)
+      if !@user.confirmed?
         @user.confirm
         token = @user.send(:set_reset_password_token)
         redirect_to edit_password_path(@user, reset_password_token: token)

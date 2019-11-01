@@ -17,7 +17,7 @@ class TopicPolicy < ApplicationPolicy
   end
 
   def destroy?
-    participant && participant.admin
+    participant&.admin
   end
 
   def edit?

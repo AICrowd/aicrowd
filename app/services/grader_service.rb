@@ -14,7 +14,7 @@ class GraderService
       .challenge_participants
       .find_by(participant_id: participant.id)
 
-    if challenge_participant.blank? or !challenge_participant.accepted_dataset_toc
+    if challenge_participant.blank? || !challenge_participant.accepted_dataset_toc
       Submission.update(
         @submission.id,
         grading_status: 'failed',
@@ -34,28 +34,26 @@ class GraderService
   end
 
   def call_grader
-    begin
-      response = self.class.post('/enqueue_grading_job',body: @body)
-      return response
-    rescue => e
-      Submission.update(
-        @submission.id,
-        grading_status: 'failed',
-        grading_message: e.message)
-      raise e
-    end
+    response = self.class.post('/enqueue_grading_job', body: @body)
+    response
+  rescue StandardError => e
+    Submission.update(
+      @submission.id,
+      grading_status: 'failed',
+      grading_message: e.message)
+    raise e
   end
 
-  def preflight_checked?(challenge,participant,submission_key)
-    if participant.api_key.present? &&  challenge.grader_identifier.present? && challenge.challenge_client_name.present? &&
-      submission_key.present?
-      return true
+  def preflight_checked?(challenge, participant, submission_key)
+    if participant.api_key.present? && challenge.grader_identifier.present? && challenge.challenge_client_name.present? &&
+        submission_key.present?
+      true
     else
-      return false
+      false
     end
   end
 
-  def evaluate_response(submission_id:,response:)
+  def evaluate_response(submission_id:, response:)
     # {"response_type"=>"AIcrowd.Event.SUCCESS", "message"=>"Successfully enqueued 1 Job", "data"=>{}}
     if response.code == 200
       resp = JSON(response.body)
@@ -72,21 +70,22 @@ class GraderService
   end
 
   private
+
   def api_query
     challenge = @submission.challenge
     participant = @submission.participant
     submission_key = get_submission_key
     team_id = participant.teams.where(challenge: challenge).first&.id || 'undefined'
 
-    if preflight_checked?(challenge,participant,submission_key)
+    if preflight_checked?(challenge, participant, submission_key)
       return body = {
         response_channel: "na",
         session_token: "na",
         api_key: participant.api_key,
-        grader_id: challenge.grader_identifier,  #CLEFChallenges
+        grader_id: challenge.grader_identifier, # CLEFChallenges
         challenge_client_name: challenge.challenge_client_name,
         function_name: "grade_submission",
-        data: [{"file_key": submission_key, submission_id: @submission.id, participant_id: participant.id, challenge_round_id: @submission.challenge_round_id, team_id: team_id}],
+        data: [{ "file_key": submission_key, submission_id: @submission.id, participant_id: participant.id, challenge_round_id: @submission.challenge_round_id, team_id: team_id }],
         dry_run: 'false',
         parallel: 'false',
         enqueue_only: 'true',
@@ -101,20 +100,18 @@ class GraderService
     end
   end
 
-=begin
-var _args = {}
-  _args["response_channel"] = "na"
-  _args["session_token"] = "na"
-  _args["api_key"] = participant_api_key
-  _args["grader_id"] = grader_id
-  _args["challenge_client_name"] = challenge_client_name
-  _args["function_name"] = "grade_submission"
-  _args["data"] = [{"file_key":s3_key}]
-  _args["dry_run"] = false
-  _args["parallel"] = false
-  _args["enqueue_only"] = false
-  _args["GRADER_API_KEY"] = grader_api_key
-=end
+  # var _args = {}
+  #   _args["response_channel"] = "na"
+  #   _args["session_token"] = "na"
+  #   _args["api_key"] = participant_api_key
+  #   _args["grader_id"] = grader_id
+  #   _args["challenge_client_name"] = challenge_client_name
+  #   _args["function_name"] = "grade_submission"
+  #   _args["data"] = [{"file_key":s3_key}]
+  #   _args["dry_run"] = false
+  #   _args["parallel"] = false
+  #   _args["enqueue_only"] = false
+  #   _args["GRADER_API_KEY"] = grader_api_key
 
   def get_submission_key
     key = @submission.submission_files.first.submission_file_s3_key

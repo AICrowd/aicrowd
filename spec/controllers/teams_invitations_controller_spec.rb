@@ -16,6 +16,7 @@ RSpec.describe Teams::Invitations::Controller, type: :controller do
 
     describe 'POST #create' do
       before { post(:create, params: { team_name: team.name, name: invitee.name }) }
+
       it { expect(team.team_invitations.pluck(:invitee_id)).to eq([invitee.id]) }
       it { expect(response).to redirect_to(team_url(name: team.name)) }
     end
@@ -37,6 +38,7 @@ RSpec.describe Teams::Invitations::Controller, type: :controller do
         params = Rails.application.routes.recognize_path(path, method: :post)
         post(params[:action], params: params.except(:controller, :action).merge(name: invitee.name))
       end
+
       it { expect(team.team_invitations.pluck(:invitee_id)).to eq([invitee.id]) }
       it { expect(response).to redirect_to(team_url(name: team.name)) }
     end

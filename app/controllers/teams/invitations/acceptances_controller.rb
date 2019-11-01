@@ -39,7 +39,7 @@ class Teams::Invitations::AcceptancesController < ApplicationController
       @redirect = url_for([@challenge, @challenge.current_challenge_rules])
       return true
     end
-    return false
+    false
   end
 
   private def redirect_on_disallowed
@@ -70,9 +70,9 @@ class Teams::Invitations::AcceptancesController < ApplicationController
 
   private def accept_atomically!
     @mails = {
-        accepted_invitations: [],
-        declined_invitations: [],
-        canceled_invitations: [],
+      accepted_invitations: [],
+      declined_invitations: [],
+      canceled_invitations: []
     }
     ActiveRecord::Base.transaction do
       # accept/reject pending invitations where participant is invited for this challenge
@@ -80,7 +80,7 @@ class Teams::Invitations::AcceptancesController < ApplicationController
         .joins(:team)
           .where(status: :pending)
           .where(invitee_id: current_participant.id)
-          .where(teams: {challenge_id: @team.challenge_id})
+          .where(teams: { challenge_id: @team.challenge_id })
           .each do |inv|
         if inv.id == @invitation.id
           inv.update!(status: :accepted)
@@ -95,17 +95,17 @@ class Teams::Invitations::AcceptancesController < ApplicationController
         .joins(:team_participants)
           .includes(:team_invitations_pending)
           .where(challenge_id: @team.challenge_id)
-          .where(team_participants: {participant_id: current_participant.id, role: :organizer})
+          .where(team_participants: { participant_id: current_participant.id, role: :organizer })
           .each do |personal_team|
         personal_team.team_invitations_pending.each do |inv|
           @mails[:canceled_invitations] << {
-              invitation: {
-                  invitor_id: inv.invitor_id,
-                  invitee_id: inv.invitee_id,
-              },
-              team: {
-                  name: personal_team.name,
-              },
+            invitation: {
+              invitor_id: inv.invitor_id,
+              invitee_id: inv.invitee_id
+            },
+            team: {
+              name: personal_team.name
+            }
           }
         end
         personal_team.destroy!
@@ -117,7 +117,7 @@ class Teams::Invitations::AcceptancesController < ApplicationController
           .joins(:team)
             .where(status: :pending)
             .where(invitee_id: creator.id)
-            .where(teams: {challenge_id: @team.challenge_id})
+            .where(teams: { challenge_id: @team.challenge_id })
             .each do |inv|
           inv.update!(status: :declined)
           @mails[:declined_invitations] << inv.id

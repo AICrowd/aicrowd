@@ -14,11 +14,11 @@ class NotificationService
 
   def comment
     message = "#{@notifiable.participant.name} commented on a discussion thread you are participating in."
-    if @notifiable.participant.image_file.file.present?
-      thumbnail_url = @notifiable.participant.image_file.url
-    else
-      thumbnail_url = 'users/user-avatar-default.svg'
-    end
+    thumbnail_url = if @notifiable.participant.image_file.file.present?
+                      @notifiable.participant.image_file.url
+                    else
+                      'users/user-avatar-default.svg'
+                    end
     notification_url = new_topic_discussion_url(@notifiable.topic)
     Notification
       .create!(
@@ -29,16 +29,16 @@ class NotificationService
         thumbnail_url: thumbnail_url,
         notification_url: notification_url,
         is_new: true)
-    return true
+    true
   end
 
   def topic
     message = "#{@notifiable.participant.name} posted a topic in a challenge you are following."
-    if @notifiable.participant.image_file.file.present?
-      thumbnail_url = @notifiable.participant.image_file.url
-    else
-      thumbnail_url = 'users/user-avatar-default.svg'
-    end
+    thumbnail_url = if @notifiable.participant.image_file.file.present?
+                      @notifiable.participant.image_file.url
+                    else
+                      'users/user-avatar-default.svg'
+                    end
     notification_url = new_topic_discussion_url(@notifiable.topic)
     Notification
       .create!(
@@ -49,16 +49,16 @@ class NotificationService
         thumbnail_url: thumbnail_url,
         notification_url: notification_url,
         is_new: true)
-    return true
+    true
   end
 
   def mention
     message = "#{@notifiable.participant.name} mentioned you in a post."
-    if @notifiable.participant.image_file.file.present?
-      thumbnail_url = @notifiable.participant.image_file.url
-    else
-      thumbnail_url = 'users/user-avatar-default.svg'
-    end
+    thumbnail_url = if @notifiable.participant.image_file.file.present?
+                      @notifiable.participant.image_file.url
+                    else
+                      'users/user-avatar-default.svg'
+                    end
     notification_url = new_topic_discussion_url(@notifiable.topic)
     Notification
       .create!(
@@ -69,7 +69,7 @@ class NotificationService
         thumbnail_url: thumbnail_url,
         notification_url: notification_url,
         is_new: true)
-    return true
+    true
   end
 
   def graded

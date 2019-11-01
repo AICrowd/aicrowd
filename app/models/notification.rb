@@ -15,10 +15,10 @@ class Notification < ApplicationRecord
     'Grading Failed' => :grading_failed,
     'Leaderboard' => :leaderboard,
     'Article' => :article
-  }
+  }.freeze
 
   def read?
-    self.read_at.present?
+    read_at.present?
   end
 
 end

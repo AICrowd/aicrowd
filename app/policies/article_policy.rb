@@ -33,7 +33,7 @@ class ArticlePolicy < ApplicationPolicy
   end
 
   def activate?
-    participant && participant.admin?
+    participant&.admin?
   end
 
   class Scope
@@ -45,7 +45,7 @@ class ArticlePolicy < ApplicationPolicy
     end
 
     def resolve
-      if participant && participant.admin?
+      if participant&.admin?
         scope.all
       else
         if participant

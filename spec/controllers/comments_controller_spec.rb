@@ -21,16 +21,17 @@ RSpec.describe CommentsController, type: :controller do
       ActiveJob::Base.queue_adapter = :test
       context "with valid params" do
         it "creates a new Comment" do
-          expect {
+          expect do
             post :create, params: { topic_id: topic.id, comment: valid_attributes }
-          }.to change(Comment, :count).by(1)
+          end.to change(Comment, :count).by(1)
         end
       end
+
       context "queues EveryCommentNotificationJob" do
         it "creates a new Comment" do
-          expect {
+          expect do
             post :create, params: { topic_id: topic.id, comment: valid_attributes }
-          }.to have_enqueued_job(EveryCommentNotificationJob)
+          end.to have_enqueued_job(EveryCommentNotificationJob)
         end
       end
     end
@@ -39,16 +40,17 @@ RSpec.describe CommentsController, type: :controller do
 
       ActiveJob::Base.queue_adapter = :test
       let(:mentionable) { create :participant, name: 'Sean' }
-      let(:valid_attributes) {
+      let(:valid_attributes) do
         {
           comment_markdown: "hello @Sean",
           mentions_cache: "[{\"id\":1,\"name\":\"Sean\"},{\"id\":22,\"name\":\"Hanno\"}]"
         }
-      }
+      end
+
       it 'queues MentionsNotificationsJob' do
-        expect {
+        expect do
           post :create, params: { topic_id: topic.id, comment: valid_attributes }
-        }.to have_enqueued_job(MentionsNotificationsJob)
+        end.to have_enqueued_job(MentionsNotificationsJob)
       end
     end
   end

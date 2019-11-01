@@ -6,15 +6,14 @@ class SubmissionPolicy < ApplicationPolicy
 
   def show?
     challenge = @record.challenge
-    if challenge.show_leaderboard.present? && challenge.submissions_page.present? && challenge.private_challenge.blank?
-      return true
-    end
+    return true if challenge.show_leaderboard.present? && challenge.submissions_page.present? && challenge.private_challenge.blank?
+
     @record.challenge.submissions_page.present? && (
       (participant && (participant.admin? ||
-        @record.challenge.organizer_id == participant.organizer_id )) ||
+        @record.challenge.organizer_id == participant.organizer_id)) ||
       (@record.challenge.submissions_page.present? && @record.challenge.show_leaderboard.present? &&
         SubmissionPolicy::Scope
-          .new(participant,Submission)
+          .new(participant, Submission)
           .resolve
           .include?(@record))
     )
@@ -32,7 +31,7 @@ class SubmissionPolicy < ApplicationPolicy
 
   def edit?
     participant && (participant.admin? ||
-      @record.challenge.organizer_id == participant.organizer_id )
+      @record.challenge.organizer_id == participant.organizer_id)
   end
 
   def update?
@@ -59,7 +58,7 @@ class SubmissionPolicy < ApplicationPolicy
         participant_id = 0
         email = nil
       end
-      %Q[
+      %[
         participant_id = #{participant_id}
         OR submissions.challenge_id IN
           (SELECT c.id
@@ -82,11 +81,11 @@ class SubmissionPolicy < ApplicationPolicy
     end
 
     def resolve
-      if participant && participant.admin?
+      if participant&.admin?
         scope.all
       else
-        if participant && participant.organizer_id
-          sql = %Q[
+        if participant&.organizer_id
+          sql = %[
             #{participant_sql(participant)}
             OR challenge_id IN
               (SELECT c.id

@@ -1,5 +1,5 @@
 class Discussion::Cell::TopicLikesListDetail < Discussion::Cell
-  
+
   def show
     render :topic_likes_list_detail
   end
@@ -14,15 +14,17 @@ class Discussion::Cell::TopicLikesListDetail < Discussion::Cell
 
   def participant_voted?
     return false if current_participant.nil?
+
     vote = topic.votes.where(participant_id: current_participant.id).first
     return true if vote.present?
-    return false
+
+    false
   end
 
   def classes
     classes = ['fa', 'fa-heart']
     classes << 'active' if participant_voted?
-    return classes.join(' ')
+    classes.join(' ')
   end
 
 end

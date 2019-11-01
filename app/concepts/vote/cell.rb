@@ -23,19 +23,22 @@ class Vote::Cell < Template::Cell
   end
 
   def refresh
-    #{}%{ console.log("#{j(show)}")}
+    # {}%{ console.log("#{j(show)}")}
     %{ $('##{vote_link_id}').replaceWith("#{j(show)}"); }
   end
 
   def participant_voted?
     return false if current_participant.nil?
+
     vote = votable.votes.where(participant_id: current_participant.id).first
     return true if vote.present?
-    return false
+
+    false
   end
 
   def display_vote_count
     return nil if votable.vote_count == 0
+
     " #{votable.vote_count}".html_safe
   end
 

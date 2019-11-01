@@ -5,7 +5,7 @@ class ParticipantSignUpsQuery
   end
 
   def sql
-    sql = %Q[
+    sql = %[
       SELECT COUNT(id), date_trunc('DAY',created_at)::DATE AS created_date
       FROM participants
       GROUP BY 2

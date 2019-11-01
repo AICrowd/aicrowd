@@ -5,7 +5,7 @@ class SuccessStoryPolicy < ApplicationPolicy
   end
 
   def show?
-    @record.published || (participant && participant.admin?)
+    @record.published || (participant&.admin?)
   end
 
   def edit?
@@ -37,10 +37,10 @@ class SuccessStoryPolicy < ApplicationPolicy
     end
 
     def resolve
-      if participant && participant.admin?
+      if participant&.admin?
         scope.all
       else
-          scope.where(published: true)
+        scope.where(published: true)
       end
     end
   end

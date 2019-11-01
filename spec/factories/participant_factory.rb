@@ -2,22 +2,22 @@ FactoryBot.define do
   factory :participant, class: Participant do
     name { FFaker::Name.unique.first_name }
     email { FFaker::Internet.unique.email }
-    password 'password12'
-    password_confirmation 'password12'
-    confirmed_at Time.now
-    api_key SecureRandom.hex
-    affiliation FFaker::Company.name
-    address FFaker::Address.street_address
-    city FFaker::Address.city
-    country_cd FFaker::Address.country_code
-    organizer nil
-    timezone 'GMT'
-    agreed_to_terms_of_use_and_privacy true
-    participation_terms_accepted_date Time.now
-    participation_terms_accepted_version 1
+    password { 'password12' }
+    password_confirmation { 'password12' }
+    confirmed_at { Time.now }
+    api_key { SecureRandom.hex }
+    affiliation { FFaker::Company.name }
+    address { FFaker::Address.street_address }
+    city { FFaker::Address.city }
+    country_cd { FFaker::Address.country_code }
+    organizer { nil }
+    timezone { 'GMT' }
+    agreed_to_terms_of_use_and_privacy { true }
+    participation_terms_accepted_date { Time.now }
+    participation_terms_accepted_version { 1 }
 
     trait :admin do
-      admin true
+      admin { true }
     end
 
     trait :organizer do
@@ -29,24 +29,24 @@ FactoryBot.define do
     end
 
     trait :invalid do
-      name nil
+      name { nil }
     end
 
     trait :every_email do
       after :create do |participant|
-        participant.email_preferences.first.update(    email_frequency: :every)
+        participant.email_preferences.first.update(email_frequency: :every)
       end
     end
 
     trait :daily do
       after :create do |participant|
-        participant.email_preferences.first.update(    email_frequency: :daily)
+        participant.email_preferences.first.update(email_frequency: :daily)
       end
     end
 
     trait :weekly do
       after :create do |participant|
-        participant.email_preferences.first.update(    email_frequency: :weekly)
+        participant.email_preferences.first.update(email_frequency: :weekly)
       end
     end
 
@@ -63,16 +63,16 @@ FactoryBot.define do
     end
 
     trait :clef_incomplete do
-      address nil
+      address { nil }
     end
 
     trait :clef_complete do
-      address 'test test test'
-      affiliation 'test'
-      first_name 'sean'
-      last_name 'carroll'
-      country_cd 'AU'
-      city 'melbourne'
+      address { 'test test test' }
+      affiliation { 'test' }
+      first_name { 'sean' }
+      last_name { 'carroll' }
+      country_cd { 'AU' }
+      city { 'melbourne' }
     end
 
   end

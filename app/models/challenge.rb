@@ -71,19 +71,19 @@ class Challenge < ApplicationRecord
           %i[ascending descending not_used],
           map: :string, prefix: true
 
-  validates_presence_of :status
-  validates_presence_of :challenge
-  validates_presence_of :organizer_id
-  validates_presence_of :primary_sort_order
-  validates_presence_of :secondary_sort_order
-  validates_uniqueness_of :challenge_client_name
+  validates :status, presence: true
+  validates :challenge, presence: true
+  validates :organizer_id, presence: true
+  validates :primary_sort_order, presence: true
+  validates :secondary_sort_order, presence: true
+  validates :challenge_client_name, uniqueness: true
   validates :challenge_client_name,
-            format: {with: /\A[a-zA-Z0-9]/}
-  validates_presence_of :challenge_client_name
+            format: { with: /\A[a-zA-Z0-9]/ }
+  validates :challenge_client_name, presence: true
 
   validate :other_scores_fieldnames_max
 
-  default_scope {
+  default_scope do
     order("challenges.featured_sequence,
             CASE challenges.status_cd
               WHEN 'running' THEN 1
@@ -92,7 +92,7 @@ class Challenge < ApplicationRecord
               WHEN 'draft' THEN 4
               ELSE 5
             END, challenges.participant_count DESC")
-  }
+  end
 
   after_create do
     client = DiscourseApi::Client.new(ENV['DISCOURSE_DOMAIN_NAME'])
@@ -104,7 +104,7 @@ class Challenge < ApplicationRecord
                                  slug: slug[0..49],
                                  color: '49d9e9',
                                  text_color: 'f0fcfd'
-    )
+                                )
     self.discourse_category_id = res['id']
     save
   end
@@ -119,7 +119,7 @@ class Challenge < ApplicationRecord
                              slug: slug[0..49],
                              color: '49d9e9',
                              text_color: 'f0fcfd'
-      )
+                            )
     end
   end
 
@@ -204,13 +204,13 @@ class Challenge < ApplicationRecord
   end
 
   def other_scores_fieldnames_max
-    errors.add(:other_scores_fieldnames, 'A max of 5 other scores Fieldnames are allowed') if other_scores_fieldnames and other_scores_fieldnames.count(',') > 4
+    errors.add(:other_scores_fieldnames, 'A max of 5 other scores Fieldnames are allowed') if other_scores_fieldnames && (other_scores_fieldnames.count(',') > 4)
   end
 
   def teams_frozen?
     return true if status == :completed
 
-    DateTime.now > (self.team_freeze_time || end_dttm)
+    DateTime.now > (team_freeze_time || end_dttm)
   end
 
   def other_scores_fieldnames_array

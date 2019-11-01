@@ -17,19 +17,19 @@ class Topic < ApplicationRecord
   end
 
   def last_activity
-    sql = %Q[
+    sql = %(
       select p.updated_at
       from posts p
       where p.topic_id = #{id}
       order by updated_at desc
-    ]
+    )
     post = Post.find_by_sql(sql).first
     if post.nil?
-      updated = self.updated_at if post.nil?
+      updated = updated_at if post.nil?
     else
       updated = post.updated_at
     end
-    return time_ago_in_words(updated)
+    time_ago_in_words(updated)
   end
 
   def participant

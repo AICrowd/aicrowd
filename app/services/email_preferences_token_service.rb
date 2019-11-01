@@ -6,17 +6,16 @@ class EmailPreferencesTokenService
 
   def email_preferences_link
     "<div>" +
-    "<a href='#{preferences_token_url}'>Email Preferences</a>" +
-    "</div>"
+      "<a href='#{preferences_token_url}'>Email Preferences</a>" +
+      "</div>"
   end
 
   def validate_token(token)
     pref_token = EmailPreferencesToken.where(email_preferences_token: token).first
 
     if pref_token.present?
-      if @participant && @participant.id != pref_token.participant.id
-        return 'invalid_participant'
-      end
+      return 'invalid_participant' if @participant && @participant.id != pref_token.participant.id
+
       if pref_token.token_expiration_dttm > DateTime.current
         pref_token.destroy!
         return 'valid_token'
@@ -32,13 +31,13 @@ class EmailPreferencesTokenService
   def preferences_token_url
     @url ||= Rails.application.routes.url_helpers.participant_notifications_url(
       participant_id: @participant.id,
-      preferences_token: generate_token,
+      preferences_token: generate_token
     )
   end
 
   private def generate_token
     token = SecureRandom.urlsafe_base64(24)
     @participant.email_preferences_tokens.create!(email_preferences_token: token, token_expiration_dttm: DateTime.current + 30.days)
-    return token
+    token
   end
 end

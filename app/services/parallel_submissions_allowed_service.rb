@@ -1,6 +1,6 @@
 class ParallelSubmissionsAllowedService
 
-  def initialize(challenge,participant)
+  def initialize(challenge, participant)
     @challenge = challenge
     @participant = participant
     # TODO add parallel_submissions to views.
@@ -9,6 +9,7 @@ class ParallelSubmissionsAllowedService
 
   def call
     return true if @round.parallel_submissions == 0
+
     parallel_submissions = @challenge.submissions
       .where(
         participant_id: @participant.id,

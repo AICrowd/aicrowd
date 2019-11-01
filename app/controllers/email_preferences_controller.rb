@@ -2,16 +2,15 @@ class EmailPreferencesController < ApplicationController
   before_action :set_participant
   before_action :email_preferences_token_or_authenticate
 
-  def edit
-  end
+  def edit; end
 
   def update
     @email_preference.attributes = email_preference_params
-    if @email_preference.newsletter_change == [false,true]
+    if @email_preference.newsletter_change == [false, true]
       # from off to on
       MailchimpService.new(@participant.id).subscribe
     end
-    if @email_preference.newsletter_change == [true,false]
+    if @email_preference.newsletter_change == [true, false]
       # from on to off
       MailchimpService.new(@participant.id).unsubscribe
     end
@@ -21,12 +20,12 @@ class EmailPreferencesController < ApplicationController
           @participant,
           id: @email_preference.id,
           preferences_token: @token),
-          notice: 'Your email preferences were successfully updated.'
+                    notice: 'Your email preferences were successfully updated.'
       else
         redirect_to participant_notifications_path(
           @participant,
           id: @email_preference.id),
-          notice: 'Your email preferences were successfully updated.'
+                    notice: 'Your email preferences were successfully updated.'
       end
     else
       render :edit
@@ -34,6 +33,7 @@ class EmailPreferencesController < ApplicationController
   end
 
   private
+
   def set_participant
     @participant = Participant.friendly.find(params[:participant_id])
   end
@@ -52,7 +52,6 @@ class EmailPreferencesController < ApplicationController
         :email_frequency)
   end
 
-
   def email_preferences_token_or_authenticate
     token = params[:preferences_token]
     Rails.logger.info("[EmailPreferencesController#email_preferences_token_or_authenticate] token: #{token}")
@@ -65,7 +64,7 @@ class EmailPreferencesController < ApplicationController
         flash[:error] = "The email preferences link is not valid for the currently logged in participant."
         redirect_to '/'
       when 'valid_token'
-        sign_in(:participant,@participant)
+        sign_in(:participant, @participant)
         @email_preference = current_participant.email_preferences.first
       when 'token_expired'
         flash[:error] = 'The email preferences link has expired.'

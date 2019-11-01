@@ -47,12 +47,12 @@ ActiveAdmin.register Partner do
   form do |f|
     f.inputs "Organizer" do
       f.input :organizer,
-        :as => :select,
-        :collection => Organizer.all.sort.collect {|organizer| [organizer.organizer, organizer.id] }
+              as: :select,
+              collection: Organizer.all.sort.collect { |organizer| [organizer.organizer, organizer.id] }
       f.input :name
       f.input :image_file,
-        as: :file,
-        hint: f.object.image_file.present? ? image_tag(f.object.image_file.url) : content_tag(:span, "no portrait yet")
+              as: :file,
+              hint: f.object.image_file.present? ? image_tag(f.object.image_file.url) : content_tag(:span, "no portrait yet")
       f.input :visible
       f.input :seq
     end

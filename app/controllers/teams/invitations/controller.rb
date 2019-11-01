@@ -7,8 +7,8 @@ class Teams::Invitations::Controller < ApplicationController
   def create
     if @team.invitations_left > 0
       @invitation = @team.team_invitations.new(
-          invitor: current_participant,
-          invitee: @invitee,
+        invitor: current_participant,
+        invitee: @invitee
       )
 
       if @invitation.save

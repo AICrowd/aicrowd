@@ -3,7 +3,7 @@ ActiveAdmin.register TeamMember do
 
   controller do
     def permitted_params
-    params.permit!
+      params.permit!
     end
   end
 

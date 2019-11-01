@@ -16,6 +16,4 @@ ActiveAdmin.register OrganizerApplication do
     actions
   end
 
-
-
 end

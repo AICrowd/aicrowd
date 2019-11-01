@@ -22,11 +22,12 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) do |u|
       u.permit(:name, :email, :password, :password_confirmation, :remember_me,
-              :agreed_to_terms_of_use_and_privacy,
-              :agreed_to_marketing)
+               :agreed_to_terms_of_use_and_privacy,
+               :agreed_to_marketing)
     end
   end
 
@@ -35,10 +36,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    current_participant #|| NullParticipant.new
+    current_participant # || NullParticipant.new
   end
 
   private
+
   def after_sign_in_path_for(resource)
     session["participant_return_to"] || root_path
   end

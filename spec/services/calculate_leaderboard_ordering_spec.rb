@@ -11,10 +11,13 @@ RSpec.describe CalculateLeaderboardService do
         primary_sort_order: :descending,
         secondary_sort_order: :descending)
     end
-    it { expect(described_class.new(
-      challenge_round_id: challenge_round.id)
+
+    it {
+      expect(described_class.new(
+        challenge_round_id: challenge_round.id)
       .get_order_by)
-      .to eq('score_display desc, score_secondary_display desc')}
+      .to eq('score_display desc, score_secondary_display desc')
+    }
   end
 
   describe 'descending / not_used' do
@@ -23,10 +26,13 @@ RSpec.describe CalculateLeaderboardService do
         primary_sort_order: :descending,
         secondary_sort_order: :not_used)
     end
-    it { expect(described_class.new(
-      challenge_round_id: challenge_round.id)
+
+    it {
+      expect(described_class.new(
+        challenge_round_id: challenge_round.id)
       .get_order_by)
-      .to eq('score_display desc')}
+      .to eq('score_display desc')
+    }
   end
 
   describe 'ascending / ascending' do
@@ -35,10 +41,13 @@ RSpec.describe CalculateLeaderboardService do
         primary_sort_order: :ascending,
         secondary_sort_order: :ascending)
     end
-    it { expect(described_class.new(
-      challenge_round_id: challenge_round.id)
+
+    it {
+      expect(described_class.new(
+        challenge_round_id: challenge_round.id)
       .get_order_by)
-      .to eq('score_display asc, score_secondary_display asc')}
+      .to eq('score_display asc, score_secondary_display asc')
+    }
   end
 
   describe 'ascending / descending' do
@@ -47,10 +56,13 @@ RSpec.describe CalculateLeaderboardService do
         primary_sort_order: :ascending,
         secondary_sort_order: :descending)
     end
-    it { expect(described_class.new(
-      challenge_round_id: challenge_round.id)
+
+    it {
+      expect(described_class.new(
+        challenge_round_id: challenge_round.id)
       .get_order_by)
-      .to eq('score_display asc, score_secondary_display desc')}
+      .to eq('score_display asc, score_secondary_display desc')
+    }
   end
 
   describe 'ascending / not_used' do
@@ -59,10 +71,13 @@ RSpec.describe CalculateLeaderboardService do
         primary_sort_order: :ascending,
         secondary_sort_order: :not_used)
     end
-    it { expect(described_class.new(
-      challenge_round_id: challenge_round.id)
+
+    it {
+      expect(described_class.new(
+        challenge_round_id: challenge_round.id)
       .get_order_by)
-      .to eq('score_display asc')}
+      .to eq('score_display asc')
+    }
   end
 
   describe 'ascending / descending' do
@@ -71,10 +86,13 @@ RSpec.describe CalculateLeaderboardService do
         primary_sort_order: :descending,
         secondary_sort_order: :descending)
     end
-    it { expect(described_class.new(
-      challenge_round_id: challenge_round.id)
+
+    it {
+      expect(described_class.new(
+        challenge_round_id: challenge_round.id)
       .get_order_by)
-      .to eq('score_display desc, score_secondary_display desc')}
+      .to eq('score_display desc, score_secondary_display desc')
+    }
   end
 
 end

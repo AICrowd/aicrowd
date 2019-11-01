@@ -50,7 +50,8 @@ ActiveAdmin.register Submission do
       f.input :challenge,
               as: :select,
               collection: Challenge.all.collect { |challenge|
-                            [challenge.challenge, challenge.id] }
+                            [challenge.challenge, challenge.id]
+                          }
       f.input :challenge_round_id
       f.input :participant_id,
               label: 'Participant',

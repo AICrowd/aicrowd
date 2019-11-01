@@ -3,7 +3,7 @@ ActiveAdmin.register Team do
   permit_params :name, :challenge_id
 
   controller do
-    defaults :finder => :find_by_name
+    defaults finder: :find_by_name
     def scoped_collection
       super.includes :challenge
     end

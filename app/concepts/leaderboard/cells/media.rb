@@ -17,12 +17,8 @@ class Leaderboard::Cell::Media < Leaderboard::Cell
   end
 
   def dimensions
-    if size == :thumb
-      return "100x75"
-    end
-    if size == :large
-      return "800x600"
-    end
+    return "100x75" if size == :thumb
+    return "800x600" if size == :large
   end
 
   def content_type
@@ -33,26 +29,26 @@ class Leaderboard::Cell::Media < Leaderboard::Cell
     file_type = media[1]
     return file_type if file_type == 'youtube'
 
-    content_type = nil if ['video','image'].exclude?(content_type)
-    return content_type
+    content_type = nil if %w[video image].exclude?(content_type)
+    content_type
   end
 
   def media_asset
     case content_type
     when nil
-      return '-'
+      '-'
     when 'image'
-      return image
+      image
     when 'video'
-      return video
+      video
     when 'youtube'
-      return youtube
+      youtube
     end
   end
 
   def image
     if public_url.present?
-      return image_tag(public_url, size: dimensions, class: "media")
+      image_tag(public_url, size: dimensions, class: "media")
     else
       "-"
     end
@@ -61,12 +57,12 @@ class Leaderboard::Cell::Media < Leaderboard::Cell
   def video
     if public_url.present?
       if size == :large
-        return video_tag(public_url, size: dimensions, controls: true, muted:true, autoplay: true, loop: true, class: "media")
+        video_tag(public_url, size: dimensions, controls: true, muted: true, autoplay: true, loop: true, class: "media")
       else
-        return video_tag(public_url, size: dimensions, autoplay: true, muted: true, loop: true, class: "media")
+        video_tag(public_url, size: dimensions, autoplay: true, muted: true, loop: true, class: "media")
       end
     else
-      return "-"
+      "-"
     end
   end
 
@@ -76,7 +72,7 @@ class Leaderboard::Cell::Media < Leaderboard::Cell
       return image_tag(url, size: "100x75", class: "media")
     end
     if size == :large && leaderboard_row.media_large.present?
-      result = %Q[
+      result = %(
         <iframe title="AIcrowd Video"
           allowfullscreen="allowfullscreen"
           mozallowfullscreen="mozallowfullscreen"
@@ -85,21 +81,21 @@ class Leaderboard::Cell::Media < Leaderboard::Cell
           webkitallowfullscreen="webkitallowfullscreen"
           width="800"
           height="600"
-          src="//www.youtube.com/embed/#{leaderboard_row.media_large }"
+          src="//www.youtube.com/embed/#{leaderboard_row.media_large}"
           frameborder="0"
           allowfullscreen>
         </iframe>
-      ]
+      )
       return result.html_safe
     end
   end
 
   def public_url
-    if size == :large
-      url = S3Service.new(leaderboard_row.media_large).public_url
-    else
-      url = S3Service.new(leaderboard_row.media_thumbnail).public_url
-    end
+    url = if size == :large
+            S3Service.new(leaderboard_row.media_large).public_url
+          else
+            S3Service.new(leaderboard_row.media_thumbnail).public_url
+          end
   end
 
 end

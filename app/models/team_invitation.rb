@@ -3,7 +3,7 @@ class TeamInvitation < ApplicationRecord
     :pending,  # invitation sending/sent, but no action taken yet
     :accepted, # invitee accepted and became a team member
     :declined, # invitee declined and did not become a team member
-    :canceled, # the invitee will not become a member because the organizer rescinded the invitation
+    :canceled # the invitee will not become a member because the organizer rescinded the invitation
   ].freeze
 
   after_initialize :init_uuid, if: :new_record?
@@ -14,8 +14,8 @@ class TeamInvitation < ApplicationRecord
 
   as_enum :status, STATUSES, map: :string, source: :status, prefix: true
 
-  validates_inclusion_of :status, in: STATUSES
-  validates_uniqueness_of :uuid
+  validates :status, inclusion: { in: STATUSES }
+  validates :uuid, uniqueness: true
 
   def to_param
     uuid

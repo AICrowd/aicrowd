@@ -10,9 +10,9 @@ RSpec.describe Organizer::EuaNotificationMailer, type: :mailer, api: true do
     let!(:email_preference) { create :email_preference, :every_email, participant: organizer_participant }
 
     it 'successfully sends a message' do
-      #puts organizer_participant.id
+      # puts organizer_participant.id
       puts clef_task.id
-      #puts participant.id
+      # puts participant.id
       res = described_class.new.sendmail(organizer_participant.id, clef_task.id, participant.id)
       man = MandrillSpecHelper.new(res)
       expect(man.status).to eq 'sent'

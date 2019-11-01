@@ -14,12 +14,13 @@ describe Participant do
 
     describe 'when name is not present' do
       before { @participant.name = ' ' }
-      it { is_expected.to_not be_valid }
+
+      it { is_expected.not_to be_valid }
     end
 
     describe 'when handle format is invalid' do
       it 'is_expected.to be invalid' do
-        handles = %w(mridul\ nagpal mridul@nagpal 12345)
+        handles = %w[mridul\ nagpal mridul@nagpal 12345]
         handles.each do |invalid_handle|
           @participant.name = invalid_handle
           expect(@participant).not_to be_valid
@@ -39,13 +40,14 @@ describe Participant do
 
     describe 'when email is not present' do
       before { @participant.email = ' ' }
-      it { is_expected.to_not be_valid }
+
+      it { is_expected.not_to be_valid }
     end
 
     describe 'when email format is invalid' do
       it 'is_expected.to be invalid' do
-        addresses = %w(participant@foo,com participant_at_foo.org example.participant@foo.
-                       foo@bar_baz.com foo@bar+baz.com foo@bar..com)
+        addresses = %w[participant@foo,com participant_at_foo.org example.participant@foo.
+                       foo@bar_baz.com foo@bar+baz.com foo@bar..com]
         addresses.each do |invalid_address|
           @participant.email = invalid_address
           expect(@participant).not_to be_valid
@@ -55,7 +57,7 @@ describe Participant do
 
     describe 'when email format is valid' do
       it 'is_expected.to be valid' do
-        addresses = %w(participant@foo.COM A_US-ER@f.b.org frst.lst@foo.jp a+b@baz.cn)
+        addresses = %w[participant@foo.COM A_US-ER@f.b.org frst.lst@foo.jp a+b@baz.cn]
         addresses.each do |valid_address|
           @participant.email = valid_address
           expect(@participant).to be_valid
@@ -70,7 +72,7 @@ describe Participant do
         participant_with_same_email.save
       end
 
-      it { is_expected.to_not be_valid }
+      it { is_expected.not_to be_valid }
     end
 
     context 'methods' do
@@ -84,7 +86,6 @@ describe Participant do
           expect(participant.active_for_authentication?).to be false
         end
       end
-
 
       describe '#format_url' do
         it 'works for https' do
@@ -103,6 +104,7 @@ describe Participant do
 
     context 'email preference defaults' do
       let!(:participant) { create :participant }
+
       it 'verify preference table is created' do
         expect(participant.email_preferences.count).to eq(1)
       end
@@ -118,6 +120,7 @@ describe Participant do
 
     context 'API key' do
       let!(:participant) { create :participant }
+
       it 'verify API key is created when account created' do
         expect(participant.api_key.length).to eq(32)
       end

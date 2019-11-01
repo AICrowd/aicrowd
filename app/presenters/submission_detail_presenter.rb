@@ -1,14 +1,12 @@
 class SubmissionDetailPresenter
 
-  def initialize(submission:,challenge:,view_context:)
+  def initialize(submission:, challenge:, view_context:)
     @view = view_context
     @submission = submission
     @challenge = challenge
   end
 
-  def challenge
-    @challenge
-  end
+  attr_reader :challenge
 
   def participant
     @participant ||= @submission.participant
@@ -24,7 +22,7 @@ class SubmissionDetailPresenter
       s3 = S3Service.new(s3_key)
       grader_logs = s3.filestream
     end
-    return grader_logs
+    grader_logs
   end
 
   def h

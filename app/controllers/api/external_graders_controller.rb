@@ -2,7 +2,7 @@ class Api::ExternalGradersController < Api::BaseController
   before_action :auth_by_api_key, only: [:show, :update]
   before_action :auth_by_api_key_and_client_id, only: [:create]
 
-  def show #GET
+  def show # GET
     Rails.logger.info "[api] Api::ExternalGradersController#get"
     Rails.logger.info "[api] params: #{params}"
     participant = Participant.where(api_key: params[:id]).first
@@ -19,8 +19,7 @@ class Api::ExternalGradersController < Api::BaseController
     render json: { message: message, participant_id: participant_id }, status: status
   end
 
-
-  def create #POST
+  def create # POST
     Rails.logger.info "[api] Api::ExternalGradersController#create"
     Rails.logger.info "[api] params: #{params}"
     message = nil
@@ -40,30 +39,26 @@ class Api::ExternalGradersController < Api::BaseController
       challenge_round_id = get_challenge_round_id(challenge: challenge, params: params)
 
       raise ChallengeRoundNotOpen unless challenge_round_open?(challenge)
-      raise ParticipantNotQualified unless participant_qualified?(challenge,participant)
-      raise ParallelSubmissionLimitExceeded unless parallel_submissions_allowed?(challenge,participant)
+      raise ParticipantNotQualified unless participant_qualified?(challenge, participant)
+      raise ParallelSubmissionLimitExceeded unless parallel_submissions_allowed?(challenge, participant)
 
       challenge_participant = challenge
         .challenge_participants
         .find_by(participant_id: participant.id)
 
-      if challenge_participant.blank?
-        raise TermsNotAcceptedByParticipant
-      end
+      raise TermsNotAcceptedByParticipant if challenge_participant.blank?
 
       submissions_remaining, reset_dttm = challenge.submissions_remaining(participant.id)
       raise NoSubmissionSlotsRemaining, reset_dttm if submissions_remaining < 1
 
-      if params[:meta].present?
-        params[:meta] = clean_meta(params[:meta])
-      end
+      params[:meta] = clean_meta(params[:meta]) if params[:meta].present?
       submission = Submission
         .create!(
           participant_id: participant.id,
           challenge_id: challenge.id,
           challenge_round_id: challenge_round_id,
           description_markdown: params[:description_markdown],
-          post_challenge: post_challenge(challenge,params),
+          post_challenge: post_challenge(challenge, params),
           meta: params[:meta])
       if media_fields_present?
         submission.update(
@@ -92,7 +87,7 @@ class Api::ExternalGradersController < Api::BaseController
       submissions_remaining, reset_dttm = challenge.submissions_remaining(participant.id)
       message = "Participant #{participant.name} scored"
       status = :accepted
-    rescue => e
+    rescue StandardError => e
       status = :bad_request
       message = e
     ensure
@@ -104,7 +99,7 @@ class Api::ExternalGradersController < Api::BaseController
     end
   end
 
-  def update #PATCH
+  def update # PATCH
     Rails.logger.info "[api] Api::ExternalGradersController#update"
     Rails.logger.info "[api] params: #{params}"
     message = nil
@@ -115,7 +110,8 @@ class Api::ExternalGradersController < Api::BaseController
     begin
       submission = Submission.find(submission_id)
       raise SubmissionIdInvalid if submission.blank?
-      post_challenge = submission.post_challenge  # preserve post_challenge status
+
+      post_challenge = submission.post_challenge # preserve post_challenge status
       challenge = submission.challenge
       submissions_remaining, reset_date = challenge.submissions_remaining(submission.participant_id)
       if media_fields_present?
@@ -152,21 +148,17 @@ class Api::ExternalGradersController < Api::BaseController
             meta = submission_meta.reverse_merge!(params[:meta])
           end
         end
-        submission.update({meta: meta})
+        submission.update({ meta: meta })
       end
 
-      if params[:grading_status].present?
-        submission.submission_grades.create!(grading_params)
-      end
-      if params[:description_markdown].present?
-        submission.description_markdown = params[:description_markdown]
-      end
+      submission.submission_grades.create!(grading_params) if params[:grading_status].present?
+      submission.description_markdown = params[:description_markdown] if params[:description_markdown].present?
 
       submission.post_challenge = post_challenge
       submission.save
       message = "Submission #{submission.id} updated"
       status = :accepted
-    rescue => e
+    rescue StandardError => e
       status = :bad_request
       message = e
     ensure
@@ -175,8 +167,9 @@ class Api::ExternalGradersController < Api::BaseController
         message: message,
         submission_id: submission_id,
         submissions_remaining: submissions_remaining,
-        reset_date: reset_date },
-        status: status
+        reset_date: reset_date
+      },
+             status: status
     end
   end
 
@@ -188,12 +181,12 @@ class Api::ExternalGradersController < Api::BaseController
     # meta field depending of if its a string, serrialized json or a hash.
     #
     if params_meta.respond_to?(:keys)
-      return params_meta
+      params_meta
     else
       begin
         # Try to parse it as a JSON
         return JSON.parse(params_meta)
-      rescue Exception => _e
+      rescue Exception => e
         # If its a string which is not a valid JSON
         # Then this is from the corrupted data
         # because of this bug :
@@ -207,23 +200,21 @@ class Api::ExternalGradersController < Api::BaseController
     end
   end
 
-
   def submission_info
-    begin
-      submission = Submission.find(params[:id])
-      raise SubmissionIdInvalid if submission.blank?
-      message = 'Submission details found.'
-      body = submission.to_json
-      status = :ok
-    rescue => e
-      status = :bad_request
-      body = nil
-      message = e
-    ensure
-      Rails.logger.info message
-      render json: { message: message,
-                     body: body }, status: status
-    end
+    submission = Submission.find(params[:id])
+    raise SubmissionIdInvalid if submission.blank?
+
+    message = 'Submission details found.'
+    body = submission.to_json
+    status = :ok
+  rescue StandardError => e
+    status = :bad_request
+    body = nil
+    message = e
+  ensure
+    Rails.logger.info message
+    render json: { message: message,
+                   body: body }, status: status
   end
 
   def presign
@@ -244,13 +235,9 @@ class Api::ExternalGradersController < Api::BaseController
     render json: { message: message, participant_id: participant_id, s3_key: s3_key, presigned_url: presigned_url }, status: status
   end
 
-  def post_challenge(challenge,params)
-    if params[:post_challenge] == "true"
-      return true
-    end
-    if params[:post_challenge] == "false"
-      return false
-    end
+  def post_challenge(challenge, params)
+    return true if params[:post_challenge] == "true"
+    return false if params[:post_challenge] == "false"
     if DateTime.now > challenge.end_dttm
       return true
     else
@@ -262,15 +249,9 @@ class Api::ExternalGradersController < Api::BaseController
     media_large = params[:media_large]
     media_thumbnail = params[:media_thumbnail]
     media_content_type = params[:media_content_type]
-    unless (media_large.present? && media_thumbnail.present? && media_content_type.present?) || (media_large.blank? && media_thumbnail.blank? && media_content_type.blank?)
-      raise MediaFieldsIncomplete
-    end
-    if media_large.present? && media_thumbnail.present? && media_content_type.present?
-      return true
-    end
-    if media_large.blank? && media_thumbnail.blank? && media_content_type.blank?
-      return false
-    end
+    raise MediaFieldsIncomplete unless (media_large.present? && media_thumbnail.present? && media_content_type.present?) || (media_large.blank? && media_thumbnail.blank? && media_content_type.blank?)
+    return true if media_large.present? && media_thumbnail.present? && media_content_type.present?
+    return false if media_large.blank? && media_thumbnail.blank? && media_content_type.blank?
   end
 
   def get_challenge_round_id(challenge:, params:)
@@ -294,18 +275,21 @@ class Api::ExternalGradersController < Api::BaseController
 
   def challenge_round_open?(challenge)
     return true if challenge.current_round.present?
+
     round = ChallengeRoundSummary
               .where(challenge_id:
                 challenge.id,
-                round_status_cd: 'current')
+                     round_status_cd: 'current')
               .where("current_timestamp between start_dttm and end_dttm")
     return false if round.blank?
   end
 
-  def participant_qualified?(challenge,participant)
+  def participant_qualified?(challenge, participant)
     return true if challenge.previous_round.nil?
+
     min_score = challenge.previous_round.minimum_score
     return true if min_score.nil?
+
     participant_leaderboard = challenge
                           .leaderboards
                           .where(participant_id: participant.id,
@@ -319,22 +303,17 @@ class Api::ExternalGradersController < Api::BaseController
   end
 
   def validate_s3_key(s3_key)
-    S3Service.new(s3_key,shared_bucket=true).valid_key?
+    S3Service.new(s3_key, shared_bucket = true).valid_key?
   end
 
   def notify_admins(submission)
     Admin::SubmissionNotificationJob.perform_later(submission)
   end
 
-
   def grading_params
     case params[:grading_status]
     when 'graded'
-      if params[:grading_message].blank?
-        grading_message = 'Graded successfully'
-      else
-        grading_message = params[:grading_message]
-      end
+      grading_message = params[:grading_message].presence || 'Graded successfully'
       grading_message = params[:grading_message]
       { score: params[:score],
         score_secondary: params[:score_secondary],
@@ -352,6 +331,7 @@ class Api::ExternalGradersController < Api::BaseController
         grading_message: params[:grading_message] }
     when 'failed'
       raise GradingMessageMissing if params[:grading_message].blank?
+
       { score: nil,
         score_secondary: nil,
         grading_status_cd: 'failed',
@@ -361,42 +341,42 @@ class Api::ExternalGradersController < Api::BaseController
     end
   end
 
-  def parallel_submissions_allowed?(challenge,participant)
-    ParallelSubmissionsAllowedService.new(challenge,participant).call
+  def parallel_submissions_allowed?(challenge, participant)
+    ParallelSubmissionsAllowedService.new(challenge, participant).call
   end
 
   class DeveloperAPIKeyInvalid < StandardError
-    def initialize(msg="The API key did not match any participant record.")
+    def initialize(msg = "The API key did not match any participant record.")
       super
     end
   end
 
   class ChallengeClientNameInvalid < StandardError
-    def initialize(msg="The Challenge Client Name string did not match any challenge.")
+    def initialize(msg = "The Challenge Client Name string did not match any challenge.")
       super
     end
   end
 
   class GradingStatusInvalid < StandardError
-    def initialize(msg="Grading status must be one of (graded|failed|initiated)")
+    def initialize(msg = "Grading status must be one of (graded|failed|initiated)")
       super
     end
   end
 
   class GradingMessageMissing < StandardError
-    def initialize(msg="Grading message must be provided if grading = failed")
+    def initialize(msg = "Grading message must be provided if grading = failed")
       super
     end
   end
 
   class SubmissionIdInvalid < StandardError
-    def initialize(msg="Submission ID is invalid.")
+    def initialize(msg = "Submission ID is invalid.")
       super
     end
   end
 
   class NoSubmissionSlotsRemaining < StandardError
-    def initialize(reset_time=nil)
+    def initialize(reset_time = nil)
       @reset_time = reset_time
       super(message)
     end
@@ -411,49 +391,49 @@ class Api::ExternalGradersController < Api::BaseController
   end
 
   class MediaFieldsIncomplete < StandardError
-    def initialize(msg='Either all or none of media_large, media_thumbnail and media_content_type must be provided.')
+    def initialize(msg = 'Either all or none of media_large, media_thumbnail and media_content_type must be provided.')
       super
     end
   end
 
   class ChallengeRoundNotOpen < StandardError
-    def initialize(msg='The challenge is not open for submissions at this time. Please check the challenge page at www.aicrowd.com')
+    def initialize(msg = 'The challenge is not open for submissions at this time. Please check the challenge page at www.aicrowd.com')
       super
     end
   end
 
   class InvalidChallengeRoundID < StandardError
-    def initialize(msg='This challenge_round_id does not exist')
+    def initialize(msg = 'This challenge_round_id does not exist')
       super
     end
   end
 
   class ParticipantNotQualified < StandardError
-    def initialize(msg='You have not qualified for this round. Please review the challenge rules at www.aicrowd.com')
+    def initialize(msg = 'You have not qualified for this round. Please review the challenge rules at www.aicrowd.com')
       super
     end
   end
 
   class ParallelSubmissionLimitExceeded < StandardError
-    def initialize(msg='You have exceeded the allowed number of parallel submissions. Please wait until your other submission(s) are graded.')
+    def initialize(msg = 'You have exceeded the allowed number of parallel submissions. Please wait until your other submission(s) are graded.')
       super
     end
   end
 
   class ParticipantDidNotAcceptParticipationTerms < StandardError
-    def initialize(msg='You have not accepted the current AIcrowd Participation Terms. Please go to the challenge page on www.aicrowd.com and click on the "participate" button.')
+    def initialize(msg = 'You have not accepted the current AIcrowd Participation Terms. Please go to the challenge page on www.aicrowd.com and click on the "participate" button.')
       super
     end
   end
 
   class ParticipantDidNotAcceptChallengeRules < StandardError
-    def initialize(msg='You have not accepted the current Challenge Rules. Please go to the challenge page on www.aicrowd.com and click on the "participate" button.')
+    def initialize(msg = 'You have not accepted the current Challenge Rules. Please go to the challenge page on www.aicrowd.com and click on the "participate" button.')
       super
     end
   end
-  
+
   class TermsNotAcceptedByParticipant < StandardError
-    def initialize(msg='Invalid Submission. Have you registered for this challenge and agreed to the participation terms?')
+    def initialize(msg = 'Invalid Submission. Have you registered for this challenge and agreed to the participation terms?')
       super
     end
   end

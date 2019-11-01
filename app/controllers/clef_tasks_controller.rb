@@ -9,8 +9,7 @@ class ClefTasksController < ApplicationController
     @challenges = @organizer.challenges
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @clef_task = @organizer.clef_tasks.new
@@ -45,6 +44,7 @@ class ClefTasksController < ApplicationController
   end
 
   private
+
   def set_organizer
     @organizer = Organizer.friendly.find(params[:organizer_id])
   end

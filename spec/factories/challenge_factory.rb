@@ -4,36 +4,36 @@ FactoryBot.define do
     challenge { FFaker::Lorem.unique.sentence(3) }
     challenge_client_name { FFaker::Internet.unique.user_name }
     tagline { FFaker::Lorem.unique.sentence(3) }
-    status :draft
-    description_markdown "### The description"
-    evaluation_markdown "# An evaluation"
-    rules_markdown "Some *rules*"
-    prizes_markdown "# Prizes are described here."
-    resources_markdown "# Helpful resources"
-    dataset_description_markdown "# Dataset description"
-    submission_instructions_markdown "## Submission instructions"
-    primary_sort_order_cd 'ascending'
-    secondary_sort_order_cd 'descending'
-    score_title 'Title_primary'
-    score_secondary_title 'Title_secondary'
-    license_markdown '## This is a license'
-    submissions_page true
-    show_leaderboard true
-    discussions_visible true
-    teams_allowed true
-    max_team_participants 5
+    status { :draft }
+    description_markdown { "### The description" }
+    evaluation_markdown { "# An evaluation" }
+    rules_markdown { "Some *rules*" }
+    prizes_markdown { "# Prizes are described here." }
+    resources_markdown { "# Helpful resources" }
+    dataset_description_markdown { "# Dataset description" }
+    submission_instructions_markdown { "## Submission instructions" }
+    primary_sort_order_cd { 'ascending' }
+    secondary_sort_order_cd { 'descending' }
+    score_title { 'Title_primary' }
+    score_secondary_title { 'Title_secondary' }
+    license_markdown { '## This is a license' }
+    submissions_page { true }
+    show_leaderboard { true }
+    discussions_visible { true }
+    teams_allowed { true }
+    max_team_participants { 5 }
 
     trait :running do
-      status :running
-      dataset_files {[ build(:dataset_file) ]}
+      status { :running }
+      dataset_files { [build(:dataset_file)] }
       after(:create) do |challenge|
         FactoryBot.create(:challenge_round, challenge: challenge)
       end
     end
 
     trait :day do
-      status :running
-      dataset_files {[ build(:dataset_file) ]}
+      status { :running }
+      dataset_files { [build(:dataset_file)] }
       after(:create) do |challenge|
         FactoryBot.create(
           :challenge_round,
@@ -45,8 +45,8 @@ FactoryBot.define do
     end
 
     trait :week do
-      status :running
-      dataset_files {[ build(:dataset_file) ]}
+      status { :running }
+      dataset_files { [build(:dataset_file)] }
       after(:create) do |challenge|
         FactoryBot.create(
           :challenge_round,
@@ -58,8 +58,8 @@ FactoryBot.define do
     end
 
     trait :round do
-      status :running
-      dataset_files {[ build(:dataset_file) ]}
+      status { :running }
+      dataset_files { [build(:dataset_file)] }
       after(:create) do |challenge|
         FactoryBot.create(
           :challenge_round,
@@ -71,8 +71,8 @@ FactoryBot.define do
     end
 
     trait :previous_round do
-      status :running
-      dataset_files {[ build(:dataset_file) ]}
+      status { :running }
+      dataset_files { [build(:dataset_file)] }
       after(:create) do |challenge|
         FactoryBot.create(
           :challenge_round,
@@ -95,22 +95,22 @@ FactoryBot.define do
     end
 
     trait :draft do
-      status :draft
-      challenge FFaker::Lorem.sentence(3)
+      status { :draft }
+      challenge { FFaker::Lorem.sentence(3) }
     end
 
     trait :completed do
-      status :completed
-      challenge FFaker::Lorem.sentence(3)
-      dataset_files {[ build(:dataset_file) ]}
+      status { :completed }
+      challenge { FFaker::Lorem.sentence(3) }
+      dataset_files { [build(:dataset_file)] }
       after(:create) do |challenge|
         FactoryBot.create(:challenge_round, challenge: challenge)
       end
     end
 
     trait :starting_soon do
-      status :starting_soon
-      challenge FFaker::Lorem.sentence(3)
+      status { :starting_soon }
+      challenge { FFaker::Lorem.sentence(3) }
     end
 
   end

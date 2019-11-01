@@ -1,7 +1,7 @@
 class ParticipantsController < ApplicationController
   before_action :authenticate_participant!, except: [:show, :index]
   before_action :set_participant,
-    only: [:show, :edit, :update, :destroy]
+                only: [:show, :edit, :update, :destroy]
 
   respond_to :html, :js
 
@@ -20,8 +20,7 @@ class ParticipantsController < ApplicationController
     @discourse_link = "#{ENV['DISCOURSE_DOMAIN_NAME']}/u/#{@participant.name}/activity"
   end
 
-  def edit
-  end
+  def edit; end
 
   def index
     redirect_to root_path
@@ -29,7 +28,7 @@ class ParticipantsController < ApplicationController
 
   def update
     @participant = Participant.friendly.find(params[:id])
-    if @participant.update_attributes(participant_params)
+    if @participant.update(participant_params)
       flash[:success] = "Profile updated"
       redirect_to @participant
     else
@@ -41,7 +40,7 @@ class ParticipantsController < ApplicationController
     @participant = Participant.friendly.find(params[:participant_id])
     @challenge = Challenge.friendly.find(params[:challenge_id])
     @participant.participation_terms_accepted_date = Time.now
-    if @participant.update_attributes(accept_terms_params)
+    if @participant.update(accept_terms_params)
       if !policy(@challenge).has_accepted_challenge_rules?
         redirect_to [@challenge, @challenge.current_challenge_rules]
       else
@@ -55,13 +54,12 @@ class ParticipantsController < ApplicationController
     redirect_to '/', notice: 'Account was successfully deleted.'
   end
 
-
   def regen_api_key
     @participant = Participant.friendly.find(params[:participant_id])
     authorize @participant
     @participant.api_key = @participant.generate_api_key
     @participant.save!
-    redirect_to participant_path(@participant),notice: 'API Key regenerated.'
+    redirect_to participant_path(@participant), notice: 'API Key regenerated.'
   end
 
   def sso_helper
@@ -71,14 +69,10 @@ class ParticipantsController < ApplicationController
     return_sso_url = decoded_hash['return_sso_url']
     sig = params[:sig]
     signed = OpenSSL::HMAC.hexdigest("sha256", ENV['SSO_SECRET'], params[:sso])
-    if(sig != signed)
-      raise RuntimeError, "Incorrect SSO signature"
-    end
+    raise "Incorrect SSO signature" if sig != signed
 
     avatar_url = ENV['DOMAIN_NAME'] + '/1ts/users/user-avatar-default.svg'
-    if current_user.image_file and not current_user.image_file.url.nil?
-      avatar_url = current_user.image_file.url
-    end
+    avatar_url = current_user.image_file.url if current_user.image_file && !current_user.image_file.url.nil?
 
     response_params = {
       email: current_user.email,
@@ -93,8 +87,7 @@ class ParticipantsController < ApplicationController
     encoded_response_query = Base64.strict_encode64(response_query)
     response_sig = OpenSSL::HMAC.hexdigest("sha256", ENV['SSO_SECRET'], encoded_response_query)
 
-    url = File.join(return_sso_url, "?sso=#{CGI::escape(encoded_response_query)}&sig=#{response_sig}")
-
+    url = File.join(return_sso_url, "?sso=#{CGI.escape(encoded_response_query)}&sig=#{response_sig}")
   end
 
   def sso
@@ -114,10 +107,11 @@ class ParticipantsController < ApplicationController
     @participant.remove_image_file!
     @participant.save
     redirect_to edit_participant_path(@participant),
-      notice: 'Image removed.'
+                notice: 'Image removed.'
   end
 
   private
+
   def set_participant
     @participant = Participant.friendly.find_by_friendly_id(params[:id])
     authorize @participant
@@ -157,6 +151,5 @@ class ParticipantsController < ApplicationController
         # :agreed_to_terms_of_use_and_privacy,
         :agreed_to_marketing)
     end
-
 
 end

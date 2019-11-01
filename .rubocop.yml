@@ -1,30 +1,32 @@
+inherit_gem:
+  gitlab-styles:
+    - rubocop-default.yml
+
 AllCops:
-  TargetRubyVersion: 2.3
-  Include:
-    - '**/Rakefile'
-    - '**/config.ru'
+  TargetRubyVersion: 2.5
+  TargetRailsVersion: 5.0
+  UseCache: true
+  CacheRootDirectory: tmp
   Exclude:
-    - 'db/**/*'
-    - 'vendor/bundle/**/*'
     - 'config/**/*'
     - 'script/**/*'
+    - 'vendor/**/*'
     - 'node_modules/**/*'
-    - 'bin/**/*'
+    - 'db/**/*'
+    - 'scripts/**/*'
     - 'lib/**/*'
+    - 'tmp/**/*'
+    - 'log/**/*'
+    - 'bin/**/*'
+    - 'doc/**/*'
+    - 'spec/**/*' # Remove when we write good tests!
+    - 'Rakefile'
+    - 'Gemfile'
 
-Rails:
-  Enabled: true
-
-Documentation:
+Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
-Style/EmptyLinesAroundBlockBody:
-  Enabled: false
-
-Style/EmptyLinesAroundClassBody:
-  Enabled: false
-
-Metrics/LineLength:
+Layout/EmptyLinesAroundClassBody:
   Enabled: false
 
 Metrics/AbcSize:
@@ -32,7 +34,3 @@ Metrics/AbcSize:
 
 Metrics/MethodLength:
   Max: 25
-
-Lint/Eval:
-  Exclude:
-    - 'spec/**/*'

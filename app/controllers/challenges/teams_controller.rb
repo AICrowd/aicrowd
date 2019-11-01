@@ -11,7 +11,7 @@ class Challenges::TeamsController < ApplicationController
       BaseLeaderboard.morph_submitter!(
         from: current_participant,
         to: @team,
-        challenge_id: @challenge.id,
+        challenge_id: @challenge.id
       )
       flash[:success] = 'Team created successfully'
       redirect_to @team

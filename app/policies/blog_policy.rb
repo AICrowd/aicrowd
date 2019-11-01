@@ -37,7 +37,7 @@ class BlogPolicy < ApplicationPolicy
     end
 
     def resolve
-      if participant && participant.admin?
+      if participant&.admin?
         scope.all
       else
         if participant

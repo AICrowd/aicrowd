@@ -13,7 +13,7 @@ class ParticipantChallenge::Cell::ListDetail < ParticipantChallenge::Cell
   end
 
   def challenge
-   @challenge ||= Challenge.find(participant_challenge.challenge_id)
+    @challenge ||= Challenge.find(participant_challenge.challenge_id)
   end
 
 end

@@ -14,15 +14,9 @@ class MembersController < ApplicationController
 
   def create
     participant = Participant.where(email: strong_params[:email]).first
-    if participant.blank?
-      flash[:error] = "No crowdAI participant can be found with that email address"
-    end
-    if participant.present? && participant.organizer_id.present?
-      flash[:error] = "Participant is already assigned to an Organizer"
-    end
-    if participant.present? && participant.organizer_id.blank? && participant.update(organizer_id: @organizer.id)
-      flash[:info] = "Participant added as an Organizer"
-    end
+    flash[:error] = "No crowdAI participant can be found with that email address" if participant.blank?
+    flash[:error] = "Participant is already assigned to an Organizer" if participant.present? && participant.organizer_id.present?
+    flash[:info] = "Participant added as an Organizer" if participant.present? && participant.organizer_id.blank? && participant.update(organizer_id: @organizer.id)
     redirect_to organizer_members_path(@organizer)
   end
 
@@ -33,6 +27,7 @@ class MembersController < ApplicationController
   end
 
   private
+
   def strong_params
     params.require(:member).permit(:email)
   end

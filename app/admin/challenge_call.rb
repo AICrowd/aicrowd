@@ -10,12 +10,13 @@ ActiveAdmin.register ChallengeCall do
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end
+
     def permitted_params
       params.permit!
     end
   end
 
-  filter :organizer, :as => :select, :collection => Organizer.all.collect {|organizer| [organizer.organizer, organizer.id] }
+  filter :organizer, as: :select, collection: Organizer.all.collect { |organizer| [organizer.organizer, organizer.id] }
   filter :headline
 
   index do
@@ -40,12 +41,12 @@ ActiveAdmin.register ChallengeCall do
   form do |f|
     f.inputs "Challenge Call" do
       f.input :title
-      f.input :organizer, :as => :select, member_label: :organizer
+      f.input :organizer, as: :select, member_label: :organizer
       f.input :headline
       f.input :description_markdown
       f.input :closing_date
       f.input :website
-      f.input :slug, :input_html => { :disabled => true }
+      f.input :slug, input_html: { disabled: true }
     end
     f.actions
   end

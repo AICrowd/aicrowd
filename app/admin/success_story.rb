@@ -4,6 +4,7 @@ ActiveAdmin.register SuccessStory do
     def find_resource
       scoped_collection.friendly.find(params[:id])
     end
+
     def permitted_params
       params.permit!
     end

@@ -45,7 +45,7 @@ class ParticipantClefTask::Cell < Template::Cell
   # end
 
   def registered?
-    return participant_status == 'registered'
+    participant_status == 'registered'
   end
 
   def participant_status
@@ -71,16 +71,16 @@ class ParticipantClefTask::Cell < Template::Cell
 
   def profile_incomplete?
     @profile_incomplete ||= begin
-      if (current_participant.first_name.blank?   ||
+      profile_incomplete = if current_participant.first_name.blank? ||
           current_participant.last_name.blank?    ||
           current_participant.affiliation.blank?  ||
           current_participant.address.blank?      ||
           current_participant.city.blank?         ||
-          current_participant.country_cd.blank?)
-        profile_incomplete = true
-      else
-        profile_incomplete = false
-      end
+          current_participant.country_cd.blank?
+                             true
+                           else
+                             false
+                           end
     end
   end
 

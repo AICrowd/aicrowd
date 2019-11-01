@@ -1,8 +1,8 @@
 class CommentsController < ApplicationController
   before_action :authenticate_participant!,
-    only: [:create, :update, :destroy]
+                only: [:create, :update, :destroy]
   before_action :set_comment,
-    only: [:edit, :update, :destroy]
+                only: [:edit, :update, :destroy]
   before_action :set_topic_and_challenge
   respond_to :html, :js
 
@@ -39,7 +39,7 @@ class CommentsController < ApplicationController
             mentioned_participant_ids: mentioned_participant_ids, comment_id: @comment.id)
       end
       redirect_to new_topic_discussion_path(@topic),
-        notice: 'Comment was successfully created.'
+                  notice: 'Comment was successfully created.'
     else
       render :new
     end
@@ -63,24 +63,25 @@ class CommentsController < ApplicationController
   end
 
   private
-    def set_comment
-      @comment = Comment.find(params[:id])
-      authorize @comment
-    end
 
-    def set_topic_and_challenge
-      @topic = Topic.friendly.find(params[:topic_id])
-      @challenge = @topic.challenge
-    end
+  def set_comment
+    @comment = Comment.find(params[:id])
+    authorize @comment
+  end
 
-    def comment_params
-      params.require(:comment)
-            .permit(:topic_id,
-                    :participant_id,
-                    :comment_markdown,
-                    :votes,
-                    :flagged,
-                    :notify)
-    end
+  def set_topic_and_challenge
+    @topic = Topic.friendly.find(params[:topic_id])
+    @challenge = @topic.challenge
+  end
+
+  def comment_params
+    params.require(:comment)
+          .permit(:topic_id,
+                  :participant_id,
+                  :comment_markdown,
+                  :votes,
+                  :flagged,
+                  :notify)
+  end
 
 end

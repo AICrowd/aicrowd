@@ -11,8 +11,9 @@ RSpec.describe Teams::Controller, type: :controller do
 
     describe 'GET #show' do
       before { get :show, params: { name: team.name } }
+
       it { expect(response).to render_template(:show) }
-      it { expect(response).to have_http_status(200) }
+      it { expect(response).to have_http_status(:ok) }
     end
   end
 
@@ -27,8 +28,9 @@ RSpec.describe Teams::Controller, type: :controller do
         params = Rails.application.routes.recognize_path(path)
         get(params[:action], params: params.except(:controller, :action))
       end
+
       it { expect(response).to render_template(:show) }
-      it { expect(response).to have_http_status(200) }
+      it { expect(response).to have_http_status(:ok) }
     end
   end
 end

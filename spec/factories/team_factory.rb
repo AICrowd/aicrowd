@@ -1,10 +1,11 @@
 FactoryBot.define do
   factory :team, class: Team do
     association :challenge
-    name { FFaker::Company.unique.name\
-      .gsub(/ /, '_')
+    name do
+      FFaker::Company.unique.name\
+      .tr(' ', '_')
       .gsub(/[^a-zA-Z0-9.\-_{}\[\]]+/, '')
-    }
+    end
 
     after :create do |team, evaluator|
       first_participant = evaluator.participants&.first

@@ -10,8 +10,7 @@ class TaskDatasetFilesController < ApplicationController
     js challenge_id: @challenge.id
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @task_dataset_file = @clef_task.task_dataset_files.new
@@ -30,16 +29,15 @@ class TaskDatasetFilesController < ApplicationController
 
   def destroy
     s3 = Aws::S3::Client.new
-    unless @task_dataset_file.dataset_file_s3_key.nil?
-      s3.delete_object(key: @task_dataset_file.dataset_file_s3_key, bucket: ENV['AWS_S3_BUCKET'])
-    end
+    s3.delete_object(key: @task_dataset_file.dataset_file_s3_key, bucket: ENV['AWS_S3_BUCKET']) unless @task_dataset_file.dataset_file_s3_key.nil?
     @task_dataset_file.destroy
 
     redirect_to organizer_clef_tasks_path(@clef_task.organizer),
-        notice: "Dataset file #{@task_dataset_file.title} was deleted."
+                notice: "Dataset file #{@task_dataset_file.title} was deleted."
   end
 
   private
+
   def set_task_dataset_file
     @task_dataset_file = TaskDatasetFile.find(params[:id])
   end
