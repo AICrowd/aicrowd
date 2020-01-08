@@ -27,20 +27,10 @@ $(document).on('turbolinks:load', function() {
 		}
 	});
 
-/*
- 	// Notifications & User Dropdowns
-	$('a#toggle-notifications').click(function(e) {
-   e.preventDefault();
-   	$('#notification-container').toggleClass("open");
- 	});
-*/
-
 	$('a#toggle-user').click(function(e) {
    e.preventDefault();
    	$('#user-container').toggleClass("open");
  	});
-
-
 
  	// Log-in Issues Menu
  	$('#login-issues').click(function(e) {

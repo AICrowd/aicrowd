@@ -32,9 +32,6 @@ function renderPreview(self,editor) {
 
 function insertText(beforeText, afterText, editor) {
     editor.focus();
-    //if(typeof editor.data('lastSelection') === "undefined") {
-    //  editor.data("lastSelection", editor.getSelection());
-    //}
     editor.data("lastSelection", editor.getSelection());
     var selection = editor.data("lastSelection");
     editor.setSelection(selection.start, selection.end);
