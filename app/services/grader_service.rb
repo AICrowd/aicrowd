@@ -101,23 +101,7 @@ class GraderService
     end
   end
 
-=begin
-var _args = {}
-  _args["response_channel"] = "na"
-  _args["session_token"] = "na"
-  _args["api_key"] = participant_api_key
-  _args["grader_id"] = grader_id
-  _args["challenge_client_name"] = challenge_client_name
-  _args["function_name"] = "grade_submission"
-  _args["data"] = [{"file_key":s3_key}]
-  _args["dry_run"] = false
-  _args["parallel"] = false
-  _args["enqueue_only"] = false
-  _args["GRADER_API_KEY"] = grader_api_key
-=end
-
   def get_submission_key
     key = @submission.submission_files.first.submission_file_s3_key
   end
-
 end
