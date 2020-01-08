@@ -10,5 +10,4 @@ ActiveAdmin.register Topic do
       params.permit!
     end
   end
-  
 end

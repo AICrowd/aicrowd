@@ -1,5 +1,4 @@
 ActiveAdmin.register Organizer do
-
   controller do
     def find_resource
       scoped_collection.friendly.find(params[:id])
@@ -27,6 +26,4 @@ ActiveAdmin.register Organizer do
   action_item :details, only: :show do
     link_to 'Organizer Details', organizer_path(params[:id])
   end
-
-
 end

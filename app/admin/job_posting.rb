@@ -1,5 +1,4 @@
 ActiveAdmin.register JobPosting do
-
   controller do
     def find_resource
       scoped_collection.friendly.find(params[:id])
@@ -68,7 +67,4 @@ ActiveAdmin.register JobPosting do
       row :updated_at
     end
   end
-
-
-
 end
