@@ -1,5 +1,4 @@
 RSpec.describe ParticipantClefTask::Cell, type: :cell do
-
   let!(:clef_task) { create :clef_task }
   let!(:participant) { create :participant }
 
@@ -47,17 +46,5 @@ RSpec.describe ParticipantClefTask::Cell, type: :cell do
       let(:participant) { create :participant, :clef_complete }
       it { expect(subject.participant_status).to eq('unregistered')}
     end
-
-    context 'requested' do
-      let(:participant) { create :participant, :clef_complete }
-      let(:participant_clef_task) { create :participant_clef_task, clef_task: clef_task, participant: participant }
-      #it { expect(subject.participant_status).to eq('requested')}
-    end
-
-    context 'registered' do
-
-    end
   end
-
-
 end

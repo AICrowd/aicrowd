@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "download dataset links" do
+feature "download dataset links", js: true do
   let!(:challenge) { create :challenge, :running }
   let!(:challenge_rules) {
     create :challenge_rules,
@@ -33,16 +33,19 @@ feature "download dataset links" do
       visit challenge_dataset_files_path(challenge, wait: 1)
       expect(page).not_to have_link 'Delete'
     end
+
     scenario 'admin' do
       log_in(admin)
       visit challenge_dataset_files_path(challenge, wait: 1)
       expect(page).to have_link 'Delete'
     end
+
     scenario 'organizer' do
       log_in(organizer)
       visit challenge_dataset_files_path(challenge, wait: 1)
       expect(page).to have_link 'Delete'
     end
+
     # TODO after participant terms is fixed
     # scenario 'download file', js: true do
     #   log_in(admin)

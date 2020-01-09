@@ -12,10 +12,12 @@ class FollowsController < ApplicationController
 
   def destroy
     Follow.destroy(params[:id])
+
     render js: concept(Follow::Cell, @followable, current_participant: current_participant).(:refresh)
   end
 
   private
+
   def set_followable
     params.each do |key,val|
       if key =~ /(.+)_id$/
@@ -24,5 +26,4 @@ class FollowsController < ApplicationController
       end
     end
   end
-
 end

@@ -78,28 +78,6 @@ RSpec.describe ClefTasksController, type: :controller do
           task_1.reload
           expect(task_1.task).to eq(new_attributes[:task])
         end
-
-        it "assigns the requested clef_task as @clef_task" do
-          put :update, params: {organizer_id: organizer.id, id: task_1.to_param, clef_task: valid_attributes}
-          #expect(assigns(:clef_task)).to eq(task_1)
-        end
-
-        it "redirects to the clef_task" do
-        #  put :update, params: { organizer_id: organizer.id, id: task_1.to_param, clef_task: valid_attributes}
-        #  expect(response).to redirect_to(clef_task)
-        end
-      end
-
-      context "with invalid params" do
-        it "assigns the clef_task as @clef_task" do
-          #put :update, params: { organizer_id: organizer.id, id: task_1.to_param, clef_task: invalid_attributes}
-          #expect(assigns(:clef_task)).to eq(task_1)
-        end
-
-        it "re-renders the 'edit' template" do
-        #  put :update, params: { organizer_id: organizer.id, id: task_1.to_param, clef_task: invalid_attributes}
-        #  expect(response).to render_template("edit")
-        end
       end
     end
 
@@ -109,12 +87,6 @@ RSpec.describe ClefTasksController, type: :controller do
           delete :destroy, params: { organizer_id: organizer.id, id: task_1.to_param }
         }.to change(ClefTask, :count).by(-1)
       end
-
-      it "redirects to the clef_tasks list" do
-        delete :destroy, params: { organizer_id: organizer.id, id: task_1.to_param }
-        #expect(response).to redirect_to(clef_tasks_url)
-      end
     end
   end
-
 end

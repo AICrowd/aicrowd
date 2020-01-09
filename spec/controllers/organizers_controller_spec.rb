@@ -85,8 +85,8 @@ RSpec.describe OrganizersController, type: :controller do
         end
 
         it "redirects to the organizer" do
-          put :update, params: { id: organizer.to_param, organizer: valid_attributes }
-          #expect(response).to redirect_to(organizer)
+          put :update, params: { id: organizer.id, organizer: valid_attributes }
+          expect(response).to redirect_to(organizer.reload)
         end
       end
 
@@ -103,18 +103,19 @@ RSpec.describe OrganizersController, type: :controller do
       end
     end
 
-    #describe "DELETE #destroy" do
-    #  it "destroys the requested organizer" do
-    #    expect {
-    #      delete :destroy, params: { id: organizer.id }
-    #    }.to change(Organizer, :count).by(-1)
-    #  end
-    #
-    #  it "redirects to the organizers list" do
-    #    delete :destroy, params: { id: organizer.id }
-    #    expect(response).to redirect_to('/')
-    #  end
-    #end
-  end
+    describe "DELETE #destroy" do
+      before { organizer }
 
+      it "destroys the requested organizer" do
+        expect {
+          delete :destroy, params: { id: organizer.id }
+        }.to change { Organizer.count }.by(-1)
+      end
+
+      it "redirects to the organizers list" do
+        delete :destroy, params: { id: organizer.id }
+        expect(response).to redirect_to organizers_path
+      end
+    end
+  end
 end

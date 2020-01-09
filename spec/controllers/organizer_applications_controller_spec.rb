@@ -1,5 +1,5 @@
 require 'rails_helper'
-=begin TODO remove this completely
+
 RSpec.describe OrganizerApplicationsController, type: :controller do
   include ActiveJob::TestHelper
   render_views
@@ -26,12 +26,5 @@ RSpec.describe OrganizerApplicationsController, type: :controller do
         post :create, params: {organizer_application: valid_attributes}, format: :js
       }.to have_enqueued_job(OrganizerApplicationNotificationJob)
     end
-
-    it "renders the ajax updater template" do
-      post :create, params: {organizer_application: valid_attributes}, format: :js
-      expect(response).to render_template('landing_page/ajax/application_accepted')
-    end
   end
-
 end
-=end

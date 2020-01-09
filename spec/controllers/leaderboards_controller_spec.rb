@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 RSpec.describe LeaderboardsController, type: :controller do
   render_views
 
@@ -10,36 +11,18 @@ RSpec.describe LeaderboardsController, type: :controller do
           participant: participant,
           grading_status_cd: 'graded' }
     end
-    let(:challenge) { create :challenge, :running }
+    let(:challenge)   { create :challenge, :running }
     let(:participant) { create :participant }
-    let(:user) { create :participant }
+    let(:user)        { create :participant }
 
     before do
       sign_in user
     end
 
     describe 'GET #index' do
-      before {
-        get :index, params: { challenge_id: submission_1.challenge_id }
-      }
-      #it { expect(assigns(:leaderboards).count).to eq(3) }
+      before { get :index, params: { challenge_id: submission_1.challenge_id } }
+
       it { expect(response).to render_template :index }
     end
-
-=begin
-    describe 'GET #show' do
-      before { get :show, params: { challenge_id: submission_1.challenge_id, id: submission_1.id } }
-      it { expect(assigns(:submission)).to eq submission_1 }
-      it { expect(assigns(:entry).id).to eq submission_1.id }
-      it { expect(response).to render_template :show }
-    end
-=end
   end
-
-
-  context 'post challenge on' do
-
-  end
-
-
 end
