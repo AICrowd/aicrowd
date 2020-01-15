@@ -17,7 +17,7 @@ describe TaskDatasetFileDownloadsController, type: :controller do
       end
     end
 
-    context "with invalid params", focus: true do
+    context "with invalid params" do
       it "raises raise ActiveRecord::RecordNotFound error" do
         expect {
           post :create, params: { task_dataset_file_id: 0 }
