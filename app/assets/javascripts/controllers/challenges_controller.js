@@ -36,13 +36,19 @@ Paloma.controller('Challenges', {
         });
     },
     edit: function () {
-        $('.active-switch').click(function () {
-            let self = this;
-            $('.active-switch').each(function () {
-                this.checked = false;
+        let switch_handler = function () {
+            $('.active-switch').each((e, checkbox) => {
+                if (checkbox !== this) {
+                    checkbox.checked = false;
+                }
             });
-            self.checked = true;
+        };
+
+        $("#rounds").on('cocoon:after-insert', function(e, added_round) {
+            added_round.find('.active-switch').on('click', switch_handler);
         });
+        $('.active-switch').on('click', switch_handler);
+
         $('#replace-rules-button').click(function (e) {
             $(this).hide()
         })
