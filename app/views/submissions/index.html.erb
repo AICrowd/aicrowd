@@ -49,31 +49,32 @@
         <!-- /challenge submissions -->
 
         <div class="toggle-switch-container">
-          <% if @my_submissions == 'off' %>
-          <%= render partial: 'submissions/index/my_submissions_off',
-                locals: { challenge: @challenge, current_round_id: @current_round_id } %>
-          <% end %>
-          <% if @my_submissions == 'on' %>
-          <%= render partial: 'submissions/index/my_submissions_on',
-                locals: { challenge: @challenge, current_round_id: @current_round_id } %>
-          <% end %>
-
-          <% if @baselines == 'off' %>
-          <%= render partial: 'submissions/index/baselines_off',
-                locals: { challenge: @challenge, current_round_id: @current_round_id } %>
-          <% end %>
-          <% if @baselines == 'on' %>
-          <%= render partial: 'submissions/index/baselines_on',
-                locals: { challenge: @challenge, current_round_id: @current_round_id } %>
-          <% end %>
+          <div class="toggle-switch-container">
+            <div class="can-toggle can-toggle--size-small">
+              <%= link_to challenge_submissions_path(@challenge, my_submissions: !@my_submissions, current_round_id: @current_round_id) do %>
+                <input id="my-submissions-switch" type="checkbox" <%= "checked" if @my_submissions %> >
+                <label for="my-submissions">
+                  <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
+                  <div class="can-toggle__label-text">My Submissions</div>
+                </label>
+              <% end %>
+            </div>
+          </div>
+          <div class="toggle-switch-container">
+            <div class="can-toggle can-toggle--size-small">
+              <%= link_to challenge_submissions_path(@challenge, baselines: !@baselines, current_round_id: @current_round_id) do %>
+                <input id="baselines-switch" type="checkbox" <%= "checked" if @baselines %> >
+                <label for="baselines">
+                  <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
+                  <div class="can-toggle__label-text">Baselines</div>
+                </label>
+              <% end %>
+            </div>
+          </div>
         </div>
 
-
         <span id="more-anchor"></span>
-          <!-- load more -->
-            <%= render partial: 'shared/load_more', locals: { collection: @submissions
-            } %>
-          <!-- /load more -->
+        <%= render partial: 'shared/load_more', locals: { collection: @submissions } %>
       </div>
     </div>
   </div>
