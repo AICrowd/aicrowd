@@ -110,10 +110,8 @@ class ChallengesController < ApplicationController
 
   def set_challenge
     @challenge = Challenge.includes(:organizer).friendly.find(params[:id])
-    if params[:version]
-      @challenge = @challenge
-                       .versions[params[:version].to_i].reify
-    end
+    @challenge = @challenge.versions[params[:version].to_i].reify if params[:version]
+
     authorize @challenge
   end
 
@@ -166,7 +164,7 @@ class ChallengesController < ApplicationController
       :other_scores_fieldname,
       :discourse_category_id,
       :other_scores_fieldnames,
-      :description_markdown,
+      :description,
       :prize_cash,
       :prize_travel,
       :prize_academic,
@@ -175,10 +173,10 @@ class ChallengesController < ApplicationController
       :clef_task_id,
       :online_submissions,
       :post_challenge_submissions,
-      :submission_instructions_markdown,
-      :license_markdown,
+      :submission_instructions,
+      :license,
       :winners_tab_active,
-      :winner_description_markdown,
+      :winner_description,
       :submissions_downloadable,
       :dynamic_content_flag,
       :dynamic_content_tab,
@@ -214,16 +212,16 @@ class ChallengesController < ApplicationController
         :start_dttm,
         :end_dttm,
         :active,
-        :leaderboard_note_markdown,
+        :leaderboard_note,
         :primary_sort_order,
         :secondary_sort_order,
         :_destroy
       ],
       challenge_rules_attributes: [
         :id,
-        :terms_markdown,
+        :terms,
         :has_additional_checkbox,
-        :additional_checkbox_text_markdown
+        :additional_checkbox_text
       ],
       invitations_attributes: [
         :id,
