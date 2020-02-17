@@ -1,4 +1,3 @@
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Controller } from 'stimulus';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -6,10 +5,10 @@ export default class extends Controller {
     connect() {
         ClassicEditor
             .create( this.element )
-            .then( editor => {
-                editor.plugins.get( 'FileRepository' ).createUploadAdapter = loader => new Adapter( loader );
+            .then( function(editor) {
+                editor.plugins.get( 'FileRepository' ).createUploadAdapter = function(loader) { new Adapter( loader ) };
             })
-            .catch(err => {console.log(err)});
+            .catch(function(err) { console.log(err) });
     }
 }
 
@@ -21,24 +20,24 @@ class Adapter {
         this.loader = loader;
     }
     upload() {
-        return new Promise( ( resolve, reject ) => {
+        return new Promise( function( resolve, reject ) {
             const reader = this.reader = new window.FileReader();
 
-            reader.addEventListener( 'load', () => {
+            reader.addEventListener( 'load', function() {
                 resolve( { default: reader.result } );
-            } );
+            });
 
-            reader.addEventListener( 'error', err => {
+            reader.addEventListener( 'error', function(err) {
                 reject( err );
-            } );
+            });
 
-            reader.addEventListener( 'abort', () => {
+            reader.addEventListener( 'abort', function() {
                 reject();
-            } );
+            });
 
-            this.loader.file.then( file => {
+            this.loader.file.then( function(file) {
                 reader.readAsDataURL( file );
-            } );
+            });
         } );
     }
 
