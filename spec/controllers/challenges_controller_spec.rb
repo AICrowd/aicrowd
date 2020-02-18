@@ -15,7 +15,7 @@ describe ChallengesController, type: :controller do
     describe 'GET #index challenge_running' do
       before { get :index }
 
-      it { expect(assigns(:challenges)).to eq [challenge_running, challenge_completed, challenge_starting_soon] }
+      it { expect(assigns(:challenges)).to eq [challenge_running, challenge_starting_soon, challenge_completed] }
       it { expect(response).to render_template :index }
     end
 

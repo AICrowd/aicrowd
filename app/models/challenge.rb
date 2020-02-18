@@ -154,19 +154,36 @@ class Challenge < ApplicationRecord
   validate :other_scores_fieldnames_max
 
   default_scope do
-    order("challenges.featured_sequence,
-            CASE challenges.status_cd
-              WHEN 'running' THEN 1
-              WHEN 'starting_soon' THEN 2
-              WHEN 'completed' THEN 3
-              WHEN 'draft' THEN 4
-              ELSE 5
-            END, challenges.participant_count DESC")
+    order(
+      "challenges.featured_sequence,
+       CASE challenges.status_cd
+         WHEN 'running' THEN 1
+         WHEN 'starting_soon' THEN 2
+         WHEN 'completed' THEN 3
+         WHEN 'draft' THEN 4
+         ELSE 5
+       END,
+       challenges.participant_count DESC"
+    )
   end
 
   after_initialize :set_defaults
   after_create :create_discourse_category
   after_update :update_discourse_category
+
+  scope :ordered_by_status, -> do
+    reorder(
+      "CASE challenges.status_cd
+         WHEN 'running' THEN 1
+         WHEN 'starting_soon' THEN 2
+         WHEN 'completed' THEN 3
+         WHEN 'draft' THEN 4
+         ELSE 5
+       END,
+       challenges.featured_sequence,
+       challenges.participant_count DESC"
+    )
+  end
 
   def set_defaults
     if new_record?
