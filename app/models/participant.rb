@@ -122,6 +122,10 @@ class Participant < ApplicationRecord
       account_disabled_dttm:   nil)
   end
 
+  def reputation
+    rand(100..1000)
+  end
+
   def active_for_authentication?
     super && account_disabled == false
   end
