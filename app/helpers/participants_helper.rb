@@ -16,4 +16,8 @@ module ParticipantsHelper
   def participant_link(participant)
     participant.present? ? participant_path(participant) : '#'
   end
+
+  def variation_class
+    ['variation-1', 'variation-2', 'variation-3'].sample
+  end
 end
