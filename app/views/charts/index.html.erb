@@ -5,7 +5,39 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Round 1</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Round 2</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Round 3</a>
+            </li>
+          </ul>
+
+          <header class="section-header col-12">
+            <div>
+              <h4>Submissions over time</h4>
+            </div>
+          </header>
         <%= line_chart submissions_vs_time_challenge_charts_path(@challenge), xtitle: "Date", ytitle: "Submissions", precision: 7, refresh: 120 %>
+
+          <header class="section-header col-12">
+            <div>
+              <h4>Score progression over time</h4>
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Primary Score
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                <a class="dropdown-item" href="#">Secondary Score</a>
+              </div>
+            </div>
+          </header>
+
         <%= area_chart top_score_vs_time_challenge_charts_path(@challenge), xtitle: "Date", ytitle: "Top Score", precision: 7, refresh: 120 %>
       </div>
     </div>
