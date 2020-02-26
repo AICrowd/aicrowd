@@ -19,6 +19,7 @@
 
       <% if policy(challenge).edit? %>
         <%= render partial: 'challenges/show/subnav_link', locals: {text: 'Participants', link: participants_link(challenge)} %>
+        <%= render partial: 'challenges/show/subnav_link', locals: {text: 'Charts', link: challenge_charts_path(challenge)} %>
       <% end %>
 
       <% if challenge.dynamic_content_tab.present? %>

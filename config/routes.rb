@@ -149,7 +149,15 @@ Rails.application.routes.draw do
     resources :participation_terms, only: [:show, :create, :index]
     resources :challenge_rules, only: [:show]
     resources :challenge_participants
+    resources :charts, only: [:index] do
+      collection do
+        get 'submissions_vs_time'
+        get 'top_score_vs_time'
+      end
+    end
   end
+
+
 
   get '/load_more_challenges', to: 'challenges#load_more', as: :load_more_challenges
 

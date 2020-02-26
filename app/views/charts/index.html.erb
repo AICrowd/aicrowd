@@ -1,0 +1,13 @@
+<%= render partial: 'shared/challenges/masthead', locals: { challenge: @challenge, challenge_rounds: @challenge_rounds, vote: @vote, follow: @follow } %>
+<%= render partial: 'challenges/show/subnav', locals: { challenge: @challenge } %>
+
+<section class="section-p-sm">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <%= line_chart submissions_vs_time_challenge_charts_path(@challenge), xtitle: "Date", ytitle: "Submissions", precision: 7, refresh: 120 %>
+        <%= area_chart top_score_vs_time_challenge_charts_path(@challenge), xtitle: "Date", ytitle: "Top Score", precision: 7, refresh: 120 %>
+      </div>
+    </div>
+  </div>
+</section>

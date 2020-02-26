@@ -17,6 +17,8 @@ module TabsHelper
       'Resources'
     when 'task_dataset_files'
       'Resources'
+    when 'charts'
+      'Charts'
     when 'participant_challenges'
       'Participants'
     when 'winners'
