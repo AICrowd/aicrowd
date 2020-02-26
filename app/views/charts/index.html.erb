@@ -39,6 +39,22 @@
           </header>
 
         <%= area_chart top_score_vs_time_challenge_charts_path(@challenge), xtitle: "Date", ytitle: "Top Score", precision: 7, refresh: 120 %>
+
+          <header class="section-header col-12">
+            <div>
+              <h4>Country wise participation</h4>
+            </div>
+          </header>
+          <!---
+            1. Update participants model with location (country), which will come from his last ahoy_event
+            2. Get plot using everyone's country information generated in 1
+          -->
+          <div id="chart-3" style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">Loading...</div>
+          <script>
+            new Chartkick.GeoChart("chart-3", [["United States",101],["Russia",63],["Germany",65],["China",50],["France",37],["Italy",35],["Australia",41]], {});
+            // currently giving error No charting library found for GeoChart which can be sorted out
+          </script>
+
       </div>
     </div>
   </div>
