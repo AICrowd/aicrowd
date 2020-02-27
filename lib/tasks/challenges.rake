@@ -30,6 +30,21 @@ namespace :challenges do
     end
   end
 
+  desc "Import old descriptions from CSV file"
+  task import_old_descriptions: :environment do
+    CSV.read("challenges_descriptions.csv").each_with_index do |challenge, index|
+      next if index == 0
+
+      challenge_id, challenge_description = challenge
+
+      Challenge.find(challenge_id).update!(description: challenge_description)
+
+      puts "Challenge##{challenge_id} - updated."
+    end
+
+    puts "Challenges descriptions import completed!"
+  end
+
   def change_headings_in_text(input_text)
     8.downto(1) do |x|
       input_text.gsub!("<h#{x}>", "<h#{x + 1}>")
