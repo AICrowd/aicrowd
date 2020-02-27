@@ -5,56 +5,42 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
+        <% if @challenge_rounds.size > 1 %>
+          <!-- Challenge Round Pills  -->
           <ul class="nav nav-pills">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Round 1</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Round 2</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Round 3</a>
-            </li>
+            <% @challenge_rounds.each do |challenge_round| %>
+              <li class="nav-item">
+                <%= link_to challenge_round.challenge_round,
+                            challenge_charts_path(challenge_round_id: challenge_round.id),
+                            class: round_pills_tab_classes(challenge_round, @current_round) %>
+              </li>
+            <% end %>
           </ul>
+          <!-- / Challenge Round Pills  -->
+        <% end %>
 
-          <header class="section-header col-12">
-            <div>
-              <h4>Submissions over time</h4>
+        <header class="section-header col-12">
+          <div>
+            <h4>Submissions over time</h4>
+          </div>
+        </header>
+        <%= line_chart submissions_vs_time_challenge_charts_path(@challenge, challenge_round_id: @current_round.id) %>
+
+        <header class="section-header col-12">
+          <div>
+            <h4>Score progression over time</h4>
+          </div>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Primary Score
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+              <a class="dropdown-item" href="#">Secondary Score</a>
             </div>
-          </header>
-        <%= line_chart submissions_vs_time_challenge_charts_path(@challenge), xtitle: "Date", ytitle: "Submissions", precision: 7, refresh: 120 %>
+          </div>
+        </header>
 
-          <header class="section-header col-12">
-            <div>
-              <h4>Score progression over time</h4>
-            </div>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Primary Score
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                <a class="dropdown-item" href="#">Secondary Score</a>
-              </div>
-            </div>
-          </header>
-
-        <%= area_chart top_score_vs_time_challenge_charts_path(@challenge), xtitle: "Date", ytitle: "Top Score", precision: 7, refresh: 120 %>
-
-          <header class="section-header col-12">
-            <div>
-              <h4>Country wise participation</h4>
-            </div>
-          </header>
-          <!---
-            1. Update participants model with location (country), which will come from his last ahoy_event
-            2. Get plot using everyone's country information generated in 1
-          -->
-          <div id="chart-3" style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">Loading...</div>
-          <script>
-            new Chartkick.GeoChart("chart-3", [["United States",101],["Russia",63],["Germany",65],["China",50],["France",37],["Italy",35],["Australia",41]], {});
-            // currently giving error No charting library found for GeoChart which can be sorted out
-          </script>
-
+        <%= area_chart top_score_vs_time_challenge_charts_path(@challenge, challenge_round_id: @current_round.id) %>
       </div>
     </div>
   </div>
