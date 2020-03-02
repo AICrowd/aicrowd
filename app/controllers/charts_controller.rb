@@ -15,16 +15,46 @@ class ChartsController < ApplicationController
 
   def top_score_vs_time
     # Calculate running maximum hash for dates
-    top_score_hash = {}
-    current_max    = 0
-    @collection.group_by_day(:created_at).maximum(:score).each do |k, v|
-      current_max       = [current_max, v.to_f.round(@challenge.active_round.score_precision)].max
-      top_score_hash[k] = current_max
-    end
-    render json: top_score_hash
+
+    score              = params[:score].presence || 'score'
+    sort_order         = if score == 'score'
+                           @current_round["primary_sort_order_cd"]
+                         else
+                           @current_round["secondary_sort_order_cd"]
+                         end
+    grouped_collection = @collection.group_by_day(:created_at)
+
+    return_hash = if sort_order == "descending"
+                    get_running_min_hash(grouped_collection, score)
+                  else
+                    # sort_order == "ascending" or "not_used"
+                    get_running_max_hash(grouped_collection, score)
+                  end
+
+    render json: return_hash
   end
 
   private
+
+  def get_running_min_hash(collection, score)
+    running_min_hash = {}
+    current_min      = 100000000000000000000
+    collection.minimum(score).each do |k, v|
+      current_min         = [current_min, v.to_f.round(@challenge.active_round.score_precision)].min
+      running_min_hash[k] = current_min
+    end
+    running_min_hash
+  end
+
+  def get_running_max_hash(collection, score)
+    running_max_hash = {}
+    current_max      = 0
+    collection.maximum(score).each do |k, v|
+      current_max         = [current_max, v.to_f.round(@challenge.active_round.score_precision)].max
+      running_max_hash[k] = current_max
+    end
+    running_max_hash
+  end
 
   def set_challenge
     @challenge = Challenge.friendly.find(params[:challenge_id])
