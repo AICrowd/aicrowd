@@ -1,3 +1,5 @@
+<%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+
 <%= render partial: 'shared/challenges/masthead', locals: {challenge: @challenge, challenge_rounds: @challenge_rounds, vote: @vote, follow: @follow} %>
 <%= render partial: 'challenges/show/subnav', locals: {challenge: @challenge} %>
 
@@ -48,6 +50,18 @@
 
           <%= area_chart top_score_vs_time_challenge_charts_path(@challenge, challenge_round_id: @current_round.id, score: 'score') %>
         </div>
+
+        <div class="chart-wrapper pb-5" data-controller="chart" data-chart-index="3" data-chart-chart-type="GeoChart">
+          <header class="section-header-decorative">
+            <div>
+              <h4>Geo Chart</h4>
+            </div>
+
+          </header>
+
+          <%= geo_chart challenge_participants_country_challenge_charts_path(@challenge), height: '600px' %>
+        </div>
+
       </div>
     </div>
   </div>

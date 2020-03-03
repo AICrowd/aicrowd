@@ -3,8 +3,8 @@ class ChartsController < ApplicationController
   before_action :set_challenge_rounds, only: :index
   before_action :set_vote, only: :index
   before_action :set_follow, only: :index
-  before_action :set_current_round
-  before_action :set_collection, except: [:index]
+  before_action :set_current_round, except: :challenge_participants_country_chart
+  before_action :set_collection, except: [:index, :challenge_participants_country_chart]
 
   def index
   end
@@ -32,6 +32,17 @@ class ChartsController < ApplicationController
                   end
 
     render json: return_hash
+  end
+
+  def challenge_participants_country
+    country_count = Hash.new(0)
+    participants  = @challenge.challenge_participants.map(&:participant).select(&:present?)
+    participants.each do |participant|
+      country                 = participant.visits.where.not(country: nil).first.country
+      country_count[country] += 1
+    end
+
+    render json: country_count
   end
 
   private

@@ -153,6 +153,7 @@ Rails.application.routes.draw do
       collection do
         get 'submissions_vs_time'
         get 'top_score_vs_time'
+        get 'challenge_participants_country'
       end
     end
   end
