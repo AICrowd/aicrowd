@@ -2,8 +2,9 @@ namespace :ahoy_visits do
   desc "Add location info to existing Ahoy Visits"
   task update_location: :environment do
     Ahoy::Visit.all.each do |visit|
-      ip       = '74.125.225.224'
-      ip       = visit.ip if visit.ip != '::'
+      next if visit.ip == '::'
+
+      ip       = visit.ip
       location = Geocoder.search(ip).first
       next unless location && location.country.present?
 
