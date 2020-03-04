@@ -38,11 +38,12 @@ class ChartsController < ApplicationController
     country_count = Hash.new(0)
     participants  = @challenge.challenge_participants.map(&:participant).select(&:present?)
     participants.each do |participant|
-      country                 = participant.visits.where.not(country: nil).first.country
+      country                 = ISO3166::Country[participant.country_cd]&.name
+      country               ||= participant.visits.where.not(country: nil).first&.country
       country_count[country] += 1
     end
 
-    render json: country_count
+    render json: country_count.except(nil)
   end
 
   private

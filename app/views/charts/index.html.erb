@@ -59,7 +59,7 @@
 
           </header>
 
-          <%= geo_chart challenge_participants_country_challenge_charts_path(@challenge), height: '600px' %>
+          <%= geo_chart challenge_participants_country_challenge_charts_path(@challenge), height: '600px', messages: {empty: "No data present for participant locations"} %>
         </div>
 
       </div>
