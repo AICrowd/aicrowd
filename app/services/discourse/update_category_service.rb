@@ -37,7 +37,7 @@ module Discourse
       # - category name has to be unique
       # - slug has to be unique
       client.put(
-        "/categories/#{challenge.discourse_category_id}", {
+        "/categories/#{challenge.discourse_category_id}.json", {
           name:       truncated_string(challenge.challenge, ensure_uniqueness),
           slug:       truncated_string(challenge.slug, ensure_uniqueness),
           color:      ::Discourse::BaseService::CATEGORY_DEFAULT_COLOR,

@@ -1,26 +1,30 @@
 module Discourse
   class FetchUsernameService < ::Discourse::BaseService
-    DISCOURSE_ENDPOINT_URL = "#{ENV['DISCOURSE_DOMAIN_NAME']}/admin/users/list.json?".freeze
-
     def initialize(participant:)
+      @client      = prepare_http_client
       @participant = participant
     end
 
     def call
-      # uri      = URI.parse("#{DISCOURSE_ENDPOINT_URL}?#{email_query_parameter}")
-      # http     = prepare_http_client(uri)
-      # response = http.request(Net::HTTP::Get.new(uri))
+      return success(participant.discourse_username) if participant.discourse_username.present?
+      return failure('DiscourseApi client couldn\'t be properly initialized.') if client.nil?
 
-      # binding.pry
+      response = client.get(fetch_username_path)
 
-      success('test')
-    rescue *BaseService::CONNECTION_ERRORS => error
-      failure(error.message)
+      binding.pry
+    rescue Discourse::Error => e
+      Logger.new(::Discourse::BaseService::LOGGER_URL).error("##{challenge.id} - Unable to retrieve username - #{e.message}")
+
+      failure('Discourse API is unavailable')
     end
 
     private
 
-    attr_reader :participant
+    attr_reader :client, :participant
+
+    def fetch_username_path
+      "/admin/users/list.json?#{email_query_parameter}"
+    end
 
     def email_query_parameter
       { email: participant.email }.to_query

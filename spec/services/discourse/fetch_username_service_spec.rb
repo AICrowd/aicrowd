@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Discourse::FetchUsernameService do
+describe Discourse::FetchUsernameService, focus: true do
   subject { described_class.new(participant: participant) }
 
   describe '#call' do
