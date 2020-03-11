@@ -10,7 +10,8 @@ gem 'rails-assets-jQuery-File-Upload'
 
 ruby '2.5.5'
 gem 'rails', '5.2.2.1'
-
+gem 'commontator'
+gem "lines-engine", git: "https://github.com/AIcrowd/aicrowd-blog.git"
 gem 'ahoy_matey'
 gem 'blazer', github: "aicrowd/blazer"
 gem 'active_model_serializers'

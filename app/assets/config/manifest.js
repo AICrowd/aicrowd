@@ -4,3 +4,6 @@
 //= link_tree ../awards
 //= link_tree ../images
 //= link_tree ../misc
+//= link commontator/manifest.js
+//= link commontator/application.css
+//= link commontator/comments.css

@@ -17,7 +17,6 @@
 //= require select2
 
 // --------------------- Vendor ------------------------ //
-//= require jQuery-File-Upload
 //= require remodal
 
 // ------------------ Vendor / Notebooks --------------- //
