@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     get 'user', to: 'oauth_credentials#show'
     get 'mailchimps/webhook' => 'mailchimps#verify', :as => :verify_webhook
     post 'mailchimps/webhook' => 'mailchimps#webhook', :as => :update_webhook
+    get 'login_user' => 'helper#login_user', :as => :login_user
   end
 
   namespace :components do
