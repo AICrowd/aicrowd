@@ -20,7 +20,7 @@
 //= require ace-rails-ap
 
 // --------------------- Vendor ------------------------ //
-//= require jQuery-File-Upload
+
 //= require remodal
 
 // ------------------ Vendor / Notebooks --------------- //

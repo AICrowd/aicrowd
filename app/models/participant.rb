@@ -310,7 +310,7 @@ class Participant < ApplicationRecord
   end
 
   def publish_to_prometheus
-    Prometheus::ParticipantCounterService.new.call
+    #Prometheus::ParticipantCounterService.new.call
   end
 
   def self.sanitize_userhandle(userhandle)

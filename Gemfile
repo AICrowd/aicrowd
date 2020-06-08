@@ -1,16 +1,12 @@
 # frozen_string_literal: true
-
 source 'https://rubygems.org'
-
 # Rails assets gems
 source 'https://rails-assets.org' do
   gem 'rails-assets-isInViewport'
   gem 'rails-assets-jQuery-File-Upload'
 end
-
 ruby '2.5.5'
 gem 'rails', '5.2.2.1'
-
 gem 'activerecord-import'
 gem 'rufus-scheduler', '~> 3.4.0'
 gem 'ahoy_matey'
@@ -95,17 +91,13 @@ gem 'validate_url'
 gem 'valid_email2'
 gem 'webpacker', '~> 2.0'
 gem "select2-rails"
-
 # HTTP clients
 gem 'faraday', '~> 1.0'
 gem 'http'
 gem 'httparty'
-
 gem 'irbtools', require: 'irbtools/binding'
-
 # ACE editor
 gem 'ace-rails-ap'
-
 group :development do
   gem "letter_opener"
   gem 'brakeman', require: false
@@ -122,7 +114,6 @@ group :development do
   gem 'web-console'
   gem 'gitlab-styles', '~> 2.8'
 end
-
 group :development, :test do
   gem 'pry-byebug'
   gem 'byebug'
@@ -134,7 +125,6 @@ group :development, :test do
   gem 'spring'
   gem 'table_print'
 end
-
 group :test do
   gem 'factory_bot_rails'
   gem 'webdrivers'
@@ -150,5 +140,4 @@ group :test do
   gem 'vcr', '~> 5.0'
   gem 'webmock', '~> 3.7', '>= 3.7.6'
 end
-
 gem 'aicrowd_evaluations', :git => 'http://gitlab.aicrowd.com/aicrowd/evaluations-api-clients.git', :branch => 'rails', glob: 'ruby/*.gemspec'
