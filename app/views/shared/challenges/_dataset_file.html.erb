@@ -17,6 +17,12 @@
       </div>
     <% end %>
   </div>
+  
+  <% if (@current_participant.organizer_ids.include?(@challenge.organizer_ids )|| current_participant.admin?) %>
+    <% if !dataset_file.visible || dataset_file.evaluation %>
+      <i class="fa fa-eye-slash" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Not visible" ></i>
+    <% end %>
+  <% end %>
 
   <div style="display:flex">
     <% if dataset_file.error_message.blank? %>
