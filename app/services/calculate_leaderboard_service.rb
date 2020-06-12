@@ -48,7 +48,8 @@ class CalculateLeaderboardService
         score_display = ROUND(score::numeric,#{@round.score_precision}),
         score_secondary_display = ROUND(score_secondary::numeric,#{@round.score_secondary_precision})
       WHERE challenge_round_id = #{@round.id}
-      AND meta_challenge_id #{@meta_challenge_condition};
+      AND meta_challenge_id #{@meta_challenge_condition}
+      AND visible IS TRUE;
     SQL
   end
 
@@ -133,6 +134,7 @@ class CalculateLeaderboardService
         FROM migration_mappings mm INNER JOIN submissions s ON mm.source_id = s.id
         WHERE mm.source_type='Submission' AND s.challenge_round_id = #{@round.id} AND s.meta_challenge_id #{@meta_challenge_condition}
         AND s.created_at <= #{cuttoff_dttm} AND s.baseline IS FALSE
+        AND s.visible IS TRUE
     SQL
 
     # associate relevant submissions with their submitter
@@ -151,6 +153,7 @@ class CalculateLeaderboardService
         AND s.post_challenge IN #{post_challenge}
         AND s.created_at <= #{cuttoff_dttm}
         AND s.baseline IS FALSE
+        AND s.visible IS TRUE
       ORDER BY submission_id;
     SQL
 
@@ -199,6 +202,7 @@ class CalculateLeaderboardService
       FROM submissions s
       INNER JOIN temp_submission_stats stats ON s.id = stats.submission_id
       WHERE s.grading_status_cd = 'graded'
+      AND s.visible IS TRUE
     SQL
     @conn.execute <<~SQL
       UPDATE temp_submission_stats stats
@@ -268,7 +272,8 @@ class CalculateLeaderboardService
         s.updated_at
       FROM submissions s
       INNER JOIN temp_submission_stats stats ON s.id = stats.submission_id
-      WHERE stats.submission_rank = 1;
+      WHERE stats.submission_rank = 1
+      AND s.visible IS TRUE;
     SQL
   end
 
@@ -367,6 +372,7 @@ class CalculateLeaderboardService
       AND s.post_challenge IN #{post_challenge}
       AND s.created_at <= #{cuttoff_dttm}
       AND s.baseline IS TRUE
+      AND s.visible IS TRUE
     SQL
   end
 

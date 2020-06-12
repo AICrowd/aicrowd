@@ -130,6 +130,7 @@ class SubmissionsController < ApplicationController
   def update
     authorize @submission
     if @submission.update(submission_params)
+      CalculateLeaderboardJob
       redirect_to @challenge,
                   notice: 'Submission updated.'
     else
@@ -231,6 +232,7 @@ class SubmissionsController < ApplicationController
     params
         .require(:submission)
         .permit(
+
           :meta_challenge_id,
           :challenge_id,
           :participant_id,
@@ -255,6 +257,7 @@ class SubmissionsController < ApplicationController
           :baseline,
           :baseline_comment,
           :submission_link,
+          :visible,
           submission_files_attributes: [
             :id,
             :seq,
@@ -273,6 +276,7 @@ class SubmissionsController < ApplicationController
   end
 
   def handle_code_based_submissions
+    
     return if params[:submission][:submission_type] != "code"
     file_location = get_s3_key.gsub("${filename}", "editor_input." + params[:language])
     begin
@@ -327,4 +331,6 @@ class SubmissionsController < ApplicationController
   def set_layout
     return 'application'
   end
+
+
 end

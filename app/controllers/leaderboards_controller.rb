@@ -4,7 +4,7 @@ class LeaderboardsController < ApplicationController
   before_action :set_current_round, only: [:index, :export, :get_affiliation]
   before_action :set_leaderboards, only: [:index, :get_affiliation]
   before_action :set_filter_service, only: [:index, :get_affiliation]
-
+  
   respond_to :js, :html
 
   def index

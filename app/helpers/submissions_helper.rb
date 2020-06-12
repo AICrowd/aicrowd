@@ -59,4 +59,7 @@ module SubmissionsHelper
     end
     submission_link
   end
+
+  
+
 end

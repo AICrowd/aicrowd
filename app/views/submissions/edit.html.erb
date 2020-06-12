@@ -124,12 +124,19 @@
           </div>
         </fieldset>
       <% end %>
+       <fieldset>
+            <%= render partial: 'challenges/fields/fancy_radio', locals: { f: f, name: :visible, text: "Visible"  } %>
+        </fieldset>
 
       <div class="button-group mt-5">
-        <%= f.button "Update Submission", class: 'btn btn-primary' %> <%= link_to 'Cancel', challenge_submissions_path(@challenge), class: "btn" %>
+        <%= f.button "Update Submission", class: 'btn btn-primary', data: { confirm: "Are you sure you want to make the changes listed?"} %> <%= link_to 'Cancel', challenge_submissions_path(@challenge), class: "btn" %>
       </div>
     <% end %>
+    
       </div>
     </div>
   </section>
 </div>
+     
+
+    
