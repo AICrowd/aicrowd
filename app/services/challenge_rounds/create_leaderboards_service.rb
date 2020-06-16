@@ -53,25 +53,29 @@ module ChallengeRounds
       users_leaderboards = []
 
       teams_submissions(post_challenge, cuttoff_dttm).each do |team_id, submissions|
-        first_graded_submission = submissions.find { |submission| submission.grading_status_cd == 'graded' }
+        first_graded_submission = submissions.find { |submission| (submission.grading_status_cd == 'graded' && submission.visible)  }
         next if first_graded_submission.blank?
 
         users_leaderboards << build_leaderboard(first_graded_submission, submissions.size, 'Team', team_id, leaderboard_type)
       end
 
       participants_submissions(post_challenge, cuttoff_dttm).each do |participant_id, submissions|
-        first_graded_submission = submissions.find { |submission| submission.grading_status_cd == 'graded' }
+        first_graded_submission = submissions.find { |submission| (submission.grading_status_cd == 'graded' && submission.visible)}
         next if first_graded_submission.blank?
 
         users_leaderboards << build_leaderboard(first_graded_submission, submissions.size, 'Participant', participant_id, leaderboard_type)
       end
 
       migration_submmissions(post_challenge, cuttoff_dttm).each do |submission|
-        users_leaderboards << build_leaderboard(submission, 1, 'OldParticipant', nil, leaderboard_type)
+        if submission.visible
+          users_leaderboards << build_leaderboard(submission, 1, 'OldParticipant', nil, leaderboard_type)
+        end
       end
 
       baseline_leaderboards = baseline_submissions(post_challenge, cuttoff_dttm).map do |submission|
-        build_leaderboard(submission, 0, 'Participant', submission.participant_id, leaderboard_type)
+        if submission.visible
+          build_leaderboard(submission, 0, 'Participant', submission.participant_id, leaderboard_type)
+        end
       end
 
       assign_row_num(users_leaderboards)
@@ -107,6 +111,7 @@ module ChallengeRounds
         .where(teams: { challenge_id: team_challenge_id })
         .where(challenge_round_id: challenge_round.id, meta_challenge_id: meta_challenge_id, post_challenge: post_challenge, baseline: false)
         .where('submissions.created_at <= ?', cuttoff_dttm)
+        .where('submissions.visible IS TRUE')
         .select('teams.id AS team_id, submissions.*')
         .reorder(submissions_order)
         .group_by { |submission| submission.team_id }
@@ -117,6 +122,7 @@ module ChallengeRounds
         .where.not(participant_id: team_participants_ids)
         .where(challenge_round_id: challenge_round.id, meta_challenge_id: meta_challenge_id, post_challenge: post_challenge, baseline: false)
         .where('submissions.created_at <= ?', cuttoff_dttm)
+        .where('submissions.visible IS TRUE')
         .reorder(submissions_order)
         .group_by { |submission| submission.participant_id }
     end
@@ -125,6 +131,7 @@ module ChallengeRounds
       submissions.left_joins(:participant)
         .where(challenge_round_id: challenge_round.id, meta_challenge_id: meta_challenge_id, post_challenge: post_challenge, baseline: false, grading_status_cd: 'graded')
         .where('submissions.created_at <= ?', cuttoff_dttm)
+        .where('submissions.visible IS TRUE')
         .reorder(submissions_order)
         .where('participants.id IS NULL')
     end
@@ -133,36 +140,39 @@ module ChallengeRounds
       challenge_round.submissions
         .where(challenge_round_id: challenge_round.id, meta_challenge_id: meta_challenge_id, post_challenge: post_challenge, baseline: true, grading_status_cd: 'graded')
         .where('submissions.created_at <= ?', cuttoff_dttm)
+        .where('submissions.visible IS TRUE')
     end
 
     def build_leaderboard(submission, submissions_count, submitter_type, submitter_id, leaderboard_type = 'leaderboard')
-      BaseLeaderboard.new(
-        meta_challenge_id:    meta_challenge_id,
-        challenge_id:         challenge.id,
-        challenge_round_id:   challenge_round.id,
-        submitter_type:       submitter_type,
-        submitter_id:         submitter_id,
-        submission_id:        submission.id,
-        seq:                  0,
-        row_num:              0,
-        previous_row_num:     0,
-        entries:              submissions_count,
-        score:                submission.score_display,
-        score_secondary:      submission.score_secondary_display,
-        meta:                 submission.meta,
-        media_large:          submission.media_large,
-        media_thumbnail:      submission.media_thumbnail,
-        media_content_type:   submission.media_content_type,
-        description:          submission.description,
-        description_markdown: submission.description_markdown,
-        leaderboard_type_cd:  leaderboard_type,
-        post_challenge:       submission.post_challenge,
-        baseline:             submission.baseline,
-        baseline_comment:     submission.baseline_comment,
-        refreshed_at:         Time.current,
-        created_at:           submission.created_at,
-        updated_at:           submission.updated_at
-      )
+      if submission.visible
+        BaseLeaderboard.new(
+          meta_challenge_id:    meta_challenge_id,
+          challenge_id:         challenge.id,
+          challenge_round_id:   challenge_round.id,
+          submitter_type:       submitter_type,
+          submitter_id:         submitter_id,
+          submission_id:        submission.id,
+          seq:                  0,
+          row_num:              0,
+          previous_row_num:     0,
+          entries:              submissions_count,
+          score:                submission.score_display,
+          score_secondary:      submission.score_secondary_display,
+          meta:                 submission.meta,
+          media_large:          submission.media_large,
+          media_thumbnail:      submission.media_thumbnail,
+          media_content_type:   submission.media_content_type,
+          description:          submission.description,
+          description_markdown: submission.description_markdown,
+          leaderboard_type_cd:  leaderboard_type,
+          post_challenge:       submission.post_challenge,
+          baseline:             submission.baseline,
+          baseline_comment:     submission.baseline_comment,
+          refreshed_at:         Time.current,
+          created_at:           submission.created_at,
+          updated_at:           submission.updated_at
+        )
+      end
     end
 
     def sort_map(sort_field)
@@ -239,7 +249,7 @@ module ChallengeRounds
     end
 
     def window_border_dttm(post_challenge)
-      (submissions.find_by(post_challenge: post_challenge, meta_challenge_id: meta_challenge_id)&.created_at || Time.current) - challenge_round.ranking_window.hours
+      (submissions.find_by(visible: true, post_challenge: post_challenge, meta_challenge_id: meta_challenge_id)&.created_at || Time.current) - challenge_round.ranking_window.hours
     end
   end
 end

@@ -255,6 +255,7 @@ class SubmissionsController < ApplicationController
           :baseline,
           :baseline_comment,
           :submission_link,
+          :visible,
           submission_files_attributes: [
             :id,
             :seq,
@@ -316,6 +317,7 @@ class SubmissionsController < ApplicationController
         FROM submissions s
         WHERE s.challenge_id = #{@challenge.id}
         AND s.participant_id = #{current_participant.id}
+        AND s.visible IS TRUE
         AND ((s.clef_primary_run IS TRUE
               AND s.grading_status_cd = 'graded')
               OR s.grading_status_cd IN ('ready', 'submitted', 'initiated'))
