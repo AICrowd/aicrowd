@@ -3,7 +3,7 @@ module ChallengeRounds
     def initialize(challenge_round:, meta_challenge_id: nil)
       @challenge_round       = challenge_round
       @challenge             = @challenge_round.challenge
-      @submissions           = @challenge_round.submissions.reorder(created_at: :desc)
+      @submissions           = @challenge_round.submissions.where(visible: true).reorder(created_at: :desc)
       @meta_challenge_id     = meta_challenge_id
 
       if @meta_challenge_id.blank?
@@ -53,14 +53,14 @@ module ChallengeRounds
       users_leaderboards = []
 
       teams_submissions(post_challenge, cuttoff_dttm).each do |team_id, submissions|
-        first_graded_submission = submissions.find { |submission| submission.grading_status_cd == 'graded' }
+        first_graded_submission = submissions.find { |submission| submission.grading_status_cd == 'graded'}
         next if first_graded_submission.blank?
 
         users_leaderboards << build_leaderboard(first_graded_submission, submissions.size, 'Team', team_id, leaderboard_type)
       end
 
       participants_submissions(post_challenge, cuttoff_dttm).each do |participant_id, submissions|
-        first_graded_submission = submissions.find { |submission| submission.grading_status_cd == 'graded' }
+        first_graded_submission = submissions.find { |submission| submission.grading_status_cd == 'graded'}
         next if first_graded_submission.blank?
 
         users_leaderboards << build_leaderboard(first_graded_submission, submissions.size, 'Participant', participant_id, leaderboard_type)
@@ -239,7 +239,7 @@ module ChallengeRounds
     end
 
     def window_border_dttm(post_challenge)
-      (submissions.find_by(post_challenge: post_challenge, meta_challenge_id: meta_challenge_id)&.created_at || Time.current) - challenge_round.ranking_window.hours
+      (submissions.find_by(visible: true, post_challenge: post_challenge, meta_challenge_id: meta_challenge_id)&.created_at || Time.current) - challenge_round.ranking_window.hours
     end
   end
 end
