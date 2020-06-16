@@ -230,7 +230,24 @@ describe ChallengeRounds::CreateLeaderboardsService do
         end
       end
     end
+    context 'when submission of submitter is invisible' do
+       let(:challenge_round) { create(:challenge_round, challenge: challenge, score_precision: 3, score_secondary_precision: 3, secondary_sort_order: :ascending) }
+       let(:participant_1) { create(:participant) }
+       let(:participant_2) { create(:participant) }
+       let!(:participant_1_submission) { create(:submission, :graded, score: 1, score_display: 1, score_secondary: 1.1, score_secondary_display: 1.1, created_at: Time.current, participant: participant_1, challenge: challenge, challenge_round: challenge_round, visible: false) }
+       let!(:participant_2_submission) { create(:submission, :graded, score: 1, score_display: 1, score_secondary: 1.1, score_secondary_display: 1.1, created_at: Time.current, participant: participant_1, challenge: challenge, challenge_round: challenge_round, visible: true) }
 
+       it 'creates leadearboards records with same row_num but different seq' do
+         result = subject.call
+
+         expect(result).to be_success
+
+         leaderboards = BaseLeaderboard.leaderboards
+
+         expect(leaderboards.find_by(submission_id: participant_1_submission.id).count).to eq 0
+         expect(leaderboards.find_by(submission_id: participant_2_submission.id).count).to eq 1
+       end
+     end
     context 'when meta_challenge_id is provided' do
       let(:meta_challenge)    { create(:challenge, :running, meta_challenge: true) }
       let(:challenge_round)   { create(:challenge_round, challenge: meta_challenge, score_precision: 3, score_secondary_precision: 3)}

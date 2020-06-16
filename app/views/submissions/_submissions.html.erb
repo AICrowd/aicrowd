@@ -3,37 +3,37 @@
     participant     = submission.participant
     challenge       = submission.challenge
     challenge_round = submission.challenge_round
+    visible         = submission.visible
   %>
-
-  <tr>
-    <td><strong><%= submission.id %></strong></td>
-    <td>
-      <% if participant.present? %>
-        <%= render partial: 'participants/get_user_profile', locals: { participant: participant, avatar: 'false' } %>
-      <% else %>
-        <span>#</span>
+    <tr>
+      <td><strong><%= submission.id %></strong></td>
+      <td>
+        <% if participant.present? %>
+          <%= render partial: 'participants/get_user_profile', locals: { participant: participant, avatar: 'false' } %>
+        <% else %>
+          <span>#</span>
+        <% end %>
+      </td>
+      <td><span class="badge <%= submission_grade_class(submission) %>"><%= submission.grading_status_cd %></span></td>
+      <td><%= submission_formatted_value(submission, submission.score_display) %></td>
+      <% if !@challenge.meta_challenge && challenge_round&.score_secondary_title.present? %>
+        <td><%= submission_formatted_value(submission, submission.score_secondary_display) %></td>
       <% end %>
-    </td>
-    <td><span class="badge <%= submission_grade_class(submission) %>"><%= submission.grading_status_cd %></span></td>
-    <td><%= submission_formatted_value(submission, submission.score_display) %></td>
-    <% if !@challenge.meta_challenge && challenge_round&.score_secondary_title.present? %>
-      <td><%= submission_formatted_value(submission, submission.score_secondary_display) %></td>
-    <% end %>
-    <td data-toggle="tooltip" data-placement="top" title="<%= submission.grading_message %>">
-      <span class='submission-truncate'>
-        <%= submission.grading_message %>
-      </span>
-    </td>
-    <% if @challenge.meta_challenge %><td><%= link_to challenge.challenge, challenge_path(challenge) %></td><% end %>
-    <td class="text-right"><%= local_time(submission.created_at, "%a, %e %b %Y") %> <br>
-      <%= local_time(submission.created_at, "%H:%M:%S") %></td>
-    <td>
-      <% if challenge.submissions_page %>
-        <%= link_to 'View', challenge_submission_path(challenge, submission), class: 'btn btn-secondary btn-sm mr-1' %>
-      <% end %>
-      <% if submission_code_link(submission).present? %>
-        <%= link_to "Code", submission_code_link(submission), class: 'btn btn-secondary btn-sm mr-1', target: "_blank", data: { toggle: 'tooltip', placement: 'top' }, title: "Browse codebase (based on your access permissions)" %>
-      <% end %>
-    </td>
-  </tr>
+      <td data-toggle="tooltip" data-placement="top" title="<%= submission.grading_message %>">
+        <span class='submission-truncate'>
+          <%= submission.grading_message %>
+        </span>
+      </td>
+      <% if @challenge.meta_challenge %><td><%= link_to challenge.challenge, challenge_path(challenge) %></td><% end %>
+      <td class="text-right"><%= local_time(submission.created_at, "%a, %e %b %Y") %> <br>
+        <%= local_time(submission.created_at, "%H:%M:%S") %></td>
+      <td>
+        <% if challenge.submissions_page %>
+          <%= link_to 'View', challenge_submission_path(challenge, submission), class: 'btn btn-secondary btn-sm mr-1' %>
+        <% end %>
+        <% if submission_code_link(submission).present? %>
+          <%= link_to "Code", submission_code_link(submission), class: 'btn btn-secondary btn-sm mr-1', target: "_blank", data: { toggle: 'tooltip', placement: 'top' }, title: "Browse codebase (based on your access permissions)" %>
+        <% end %>
+      </td>
+    </tr>
 <% end %>
