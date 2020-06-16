@@ -111,7 +111,6 @@ module ChallengeRounds
         .where(teams: { challenge_id: team_challenge_id })
         .where(challenge_round_id: challenge_round.id, meta_challenge_id: meta_challenge_id, post_challenge: post_challenge, baseline: false)
         .where('submissions.created_at <= ?', cuttoff_dttm)
-        .where('submissions.visible IS TRUE')
         .select('teams.id AS team_id, submissions.*')
         .reorder(submissions_order)
         .group_by { |submission| submission.team_id }
@@ -122,7 +121,6 @@ module ChallengeRounds
         .where.not(participant_id: team_participants_ids)
         .where(challenge_round_id: challenge_round.id, meta_challenge_id: meta_challenge_id, post_challenge: post_challenge, baseline: false)
         .where('submissions.created_at <= ?', cuttoff_dttm)
-        .where('submissions.visible IS TRUE')
         .reorder(submissions_order)
         .group_by { |submission| submission.participant_id }
     end
@@ -131,7 +129,6 @@ module ChallengeRounds
       submissions.left_joins(:participant)
         .where(challenge_round_id: challenge_round.id, meta_challenge_id: meta_challenge_id, post_challenge: post_challenge, baseline: false, grading_status_cd: 'graded')
         .where('submissions.created_at <= ?', cuttoff_dttm)
-        .where('submissions.visible IS TRUE')
         .reorder(submissions_order)
         .where('participants.id IS NULL')
     end
@@ -140,39 +137,36 @@ module ChallengeRounds
       challenge_round.submissions
         .where(challenge_round_id: challenge_round.id, meta_challenge_id: meta_challenge_id, post_challenge: post_challenge, baseline: true, grading_status_cd: 'graded')
         .where('submissions.created_at <= ?', cuttoff_dttm)
-        .where('submissions.visible IS TRUE')
     end
 
     def build_leaderboard(submission, submissions_count, submitter_type, submitter_id, leaderboard_type = 'leaderboard')
-      if submission.visible
-        BaseLeaderboard.new(
-          meta_challenge_id:    meta_challenge_id,
-          challenge_id:         challenge.id,
-          challenge_round_id:   challenge_round.id,
-          submitter_type:       submitter_type,
-          submitter_id:         submitter_id,
-          submission_id:        submission.id,
-          seq:                  0,
-          row_num:              0,
-          previous_row_num:     0,
-          entries:              submissions_count,
-          score:                submission.score_display,
-          score_secondary:      submission.score_secondary_display,
-          meta:                 submission.meta,
-          media_large:          submission.media_large,
-          media_thumbnail:      submission.media_thumbnail,
-          media_content_type:   submission.media_content_type,
-          description:          submission.description,
-          description_markdown: submission.description_markdown,
-          leaderboard_type_cd:  leaderboard_type,
-          post_challenge:       submission.post_challenge,
-          baseline:             submission.baseline,
-          baseline_comment:     submission.baseline_comment,
-          refreshed_at:         Time.current,
-          created_at:           submission.created_at,
-          updated_at:           submission.updated_at
-        )
-      end
+      BaseLeaderboard.new(
+        meta_challenge_id:    meta_challenge_id,
+        challenge_id:         challenge.id,
+        challenge_round_id:   challenge_round.id,
+        submitter_type:       submitter_type,
+        submitter_id:         submitter_id,
+        submission_id:        submission.id,
+        seq:                  0,
+        row_num:              0,
+        previous_row_num:     0,
+        entries:              submissions_count,
+        score:                submission.score_display,
+        score_secondary:      submission.score_secondary_display,
+        meta:                 submission.meta,
+        media_large:          submission.media_large,
+        media_thumbnail:      submission.media_thumbnail,
+        media_content_type:   submission.media_content_type,
+        description:          submission.description,
+        description_markdown: submission.description_markdown,
+        leaderboard_type_cd:  leaderboard_type,
+        post_challenge:       submission.post_challenge,
+        baseline:             submission.baseline,
+        baseline_comment:     submission.baseline_comment,
+        refreshed_at:         Time.current,
+        created_at:           submission.created_at,
+        updated_at:           submission.updated_at
+      )
     end
 
     def sort_map(sort_field)
