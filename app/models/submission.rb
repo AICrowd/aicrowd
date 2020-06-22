@@ -56,8 +56,7 @@ class Submission < ApplicationRecord
         .perform_later(challenge_round_id: challenge_round_id)
     end
     Prometheus::SubmissionCounterService.new(submission_id: id).call
-    participant_id = Participant.find_by(id: Submission.find_by(id: id).participant_id)
-    ParticipantBadgeJob.perform_later(name: "onsubmission", participant_id: participant_id, grading_status_cd: grading_status_cd)
+    ParticipantBadgeJob.perform_later(name: "onsubmission", participant_id: participant.id, grading_status_cd: grading_status_cd)
     Notification::SubmissionNotificationJob.perform_later(id)
   end
 
