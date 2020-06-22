@@ -56,9 +56,8 @@ class Submission < ApplicationRecord
         .perform_later(challenge_round_id: challenge_round_id)
     end
     Prometheus::SubmissionCounterService.new(submission_id: id).call
-    for badge in AicrowdBadge.where(badges_event_id: BadgesEvent.where(name: "onsubmission").pluck(:id))
-      eval(badge.code)
-    end
+    participant_id = Participant.find_by(id: Submission.find_by(id: id).participant_id)
+    ParticipantBadgeJob.perform_later(name: "onsubmission", participant_id: participant_id, grading_status_cd: grading_status_cd)
     Notification::SubmissionNotificationJob.perform_later(id)
   end
 
