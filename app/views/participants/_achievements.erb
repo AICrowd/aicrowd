@@ -9,21 +9,22 @@
           <div class="achievements-overview">
 
             <header class="achievements-gold">
-                  <span class="achievements-level">
-                    <%= color %>
-                  </span>
+              <span class="achievements-level">
+                <%= color %>
+              </span>
               <span class="achievements-total">
-                    <%= badges_count[BadgeType.find_by(name: color)&.id.to_i].to_i %>
-                  </span>
+                <%= badges_count[BadgeType.find_by(name: color)&.id.to_i].to_i %>
+              </span>
             </header>
-            <% badges[color.to_sym].to_a.each do |badge| %>
+            <% badges_of_color = badges[color.to_sym].to_a %>
+            <% badges_of_color.uniq{|x| x.name}.each do |badge_name| %>
               <div class="achievements-list">
                 <div class="achievements-list-item">
                   <div class="achievements-description-gold">
-                    <%= badge['name'] %>
+                    <%= badge_name %>
                   </div>
                   <div class="achievements-date">
-                    <%= badge['created_at'].strftime("%B %d, %Y") %>
+                    <%= badges_of_color[badge_name.to_sym].count %>
                   </div>
                 </div>
               </div>
@@ -56,7 +57,7 @@
             <span class="description">
               <%= badge.aicrowd_badge['description'] %> <br />
               <% badge.custom_fields.each do |key,value| %>
-              <%= key %> : <%= value %> <br />
+                  <%= key %> : <%= value %> <br />
               <% end %>
             </span>
           </div>
