@@ -60,6 +60,7 @@ class Submission < ApplicationRecord
         .perform_later(challenge_round_id: challenge_round_id)
     end
     Prometheus::SubmissionCounterService.new(submission_id: id).call
+    IntercomService.new('made_submission', Participant.find_by(id: participant_id)).call
     if grading_status_cd == 'graded'
       ParticipantBadgeJob.perform_later(name: "onsubmission", submission_id: id, grading_status_cd: grading_status_cd)
     end
