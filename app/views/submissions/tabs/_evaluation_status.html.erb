@@ -3,8 +3,22 @@
     <% if description_markdown.present? && is_organiser_or_author %>
       <hr/>
       <div class="md-content w-100">
-        <%= description_markdown %>
+      <p><code class='aicrowd-mermaid'>
+  graph LR;  build-packages-and-env(Build Packages And&lt;br/&gt;Env)
+  build-packages-and-env --&gt; generate-predictions-on-training-sample
+  generate-predictions-on-training-sample(Generate Predictions&lt;br/&gt;On Training Sample)
+  generate-predictions-on-training-sample --&gt; generate-predictions-for-leaderboard
+  generate-predictions-for-leaderboard(Generate Predictions&lt;br/&gt;For Leaderboard)
+  generate-predictions-for-leaderboard --&gt; evaluate-predictions
+  evaluate-predictions(Evaluate Predictions)
+  classDef success fill:#5CB85C,stroke:#fff,color:#fff;
+  classDef progress fill:#428BCA,stroke:#fff,color:#fff;
+  classDef pending fill:#F0AD4E,stroke:#fff,color:#fff;
+  classDef failed fill:#db3b21,stroke:#fff,color:#fff;
+  class build-packages-and-env,generate-predictions-on-training-sample,generate-predictions-for-leaderboard,evaluate-predictions success
+</code></p>
       </div>
     <% end %>
   </div>
 <% end %>
+

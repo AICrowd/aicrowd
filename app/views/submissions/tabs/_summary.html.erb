@@ -1,4 +1,6 @@
 <% cache_if cache_enabled?, [@submission, @submission.challenge_round.default_leaderboard, current_participant.present?] do %>
+<div class="row">
+<div class="col-md-7">
 <% if submission_view_description(submission) %>
   <div class="mb-5">
     <p><%= @submission.description %></p>
@@ -54,14 +56,26 @@
     <% end %>
   <% end %>
 <% end %>
-<!--Detail media start-->
-<div class="col-sm-12 col-md-6">
+</div>
+<div class="col-md-5">
+  <div class="col-sm-12 col-md-6">
   <% if @challenge.media_on_leaderboard %>
     <div class="media">
       <%= render partial: 'shared/challenges/media', locals: { mediable: @submission, submission_id: @submission.id, size: :large } %>
     </div>
   <% end %>
 </div>
+
+  </div>
+</div>
+<!--Detail media start-->
+<!-- <div class="col-sm-12 col-md-6">
+  <% if @challenge.media_on_leaderboard %>
+    <div class="media"> -->
+     <!--  <%= render partial: 'shared/challenges/media', locals: { mediable: @submission, submission_id: @submission.id, size: :large } %> -->
+   <!--  </div>
+  <% end %>
+</div> -->
 <!--Detail media end-->
 <div class="col-sm-12 col-md-6 pl-0">
   <div class="section-header mt-4 pt-4 border-top">

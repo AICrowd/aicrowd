@@ -5746,6 +5746,7 @@ video {
   .list-group-users .list-group-item-user {
     padding: 1rem 0;
   }
+  
 }
 
 .list-group-users .avatar {
@@ -5783,6 +5784,7 @@ video {
   .list-group-challenge-teams .avatar-group {
     margin: .5rem 0 0 0;
   }
+
 }
 
 .list-group-challenge-teams .submissions {
@@ -11153,12 +11155,56 @@ body {
 }
 
 .avatar-group a, .avatar-group span {
-  margin-left: -4px;
+  margin-left: -2px;
+}
+@media (max-width : 767.98px){
+  .publication-date-mobile{
+ font-size:0.65rem;
+  
+}
+.publication-cite-button{
+  font-size:0.75rem!important;
+  margin-top:0.5rem;
+}
+.publication-abstract-mobile{
+  margin-top: -3.0rem!important;
+}
+.publication-venue-mobile{
+font-size:0.75rem;
+  
+}
+.publication-button-mobile{
+  margin-top:0.7rem;
+}
+   
+.avatar-group-research{
+    flex-flow: wrap !important;
+    justify-content: start;
 }
 
-.avatar-group a:first-of-type, .avatar-group span:first-of-type {
-  margin-left: 0;
+.publciation-btn-desc .btn{
+      font-size: .762rem !important;
+      padding: 0.25rem 0.875rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      border-radius: 1.5rem;
 }
+.avatar-group-mobile{
+  flex-flow: column!important;
+    align-items: baseline!important;
+}
+.avatar-group-mobile a{
+  margin-top: 0.4rem;
+}
+.avatar-group a:first-of-type, .avatar-group span:first-of-type{
+  margin-left:none!important;
+}
+
+}
+.avatar-group-mobile{
+  flex-flow: wrap;
+}
+
 
 .avatar-group .avatar {
   width: 32px;
@@ -14384,6 +14430,7 @@ input.width-185 {
 }
 
 .aicrowd-mermaid {
+  font-family:"inter-ui", sans-serif;
   background: unset;
   font-size: unset;
 }

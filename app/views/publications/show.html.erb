@@ -21,7 +21,7 @@
         <% end %>
         <h1 style="max-width: unset;text-transform: capitalize;font-size: 2.25rem;"><%= @publication.title %></h1>
 
-        <div class="avatar-group mt-3 mb-n4 list-group-research-big">
+        <div class="avatar-group avatar-group-mobile mt-3 mb-n4 list-group-research-big">
           <% @publication.authors.each do |author| %>
             <% if author.participant_id.present? %>
               <%= render partial: 'participants/get_user_profile_for_research', locals: { participant: author.participant, username: author.name } %>
@@ -71,7 +71,7 @@
 <!-- sub-nav bar -->
 <div class="sub-nav-bar sticky-top">
   <div class="container-fluid overflow-hidden">
-    <div class="row col-12 d-flex justify-content-end">
+    <div class="row col-12 d-flex justify-content-end publciation-btn-desc">
       <div class="mr-auto btn-set" aria-hidden="true">
         <% @publication.external_links.each do |external_link| %>
           <a class="btn btn-primary btn-sm" href="<% external_link.link %>">

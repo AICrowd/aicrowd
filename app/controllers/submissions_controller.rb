@@ -91,7 +91,23 @@ class SubmissionsController < ApplicationController
       @description_markdown.gsub!("<h1", "<h2")
       @description_markdown.gsub!("</h1>", "</h2>")
       @description_markdown = @description_markdown.html_safe
+
     end
+    @description_markdown = "<p><code class='aicrowd-mermaid'>
+graph LR;  build-packages-and-env(Build Packages And&lt;br/&gt;Env)
+  build-packages-and-env --&gt; generate-predictions-on-training-sample
+  generate-predictions-on-training-sample(Generate Predictions&lt;br/&gt;On Training Sample)
+  generate-predictions-on-training-sample --&gt; generate-predictions-for-leaderboard
+  generate-predictions-for-leaderboard(Generate Predictions&lt;br/&gt;For Leaderboard)
+  generate-predictions-for-leaderboard --&gt; evaluate-predictions
+  evaluate-predictions(Evaluate Predictions)
+  classDef success fill:#5CB85C,stroke:#fff,color:#fff;
+  classDef progress fill:#428BCA,stroke:#fff,color:#fff;
+  classDef pending fill:#F0AD4E,stroke:#fff,color:#fff;
+  classDef failed fill:#db3b21,stroke:#fff,color:#fff;
+  class build-packages-and-env,generate-predictions-on-training-sample,generate-predictions-for-leaderboard,evaluate-predictions success
+</code></p>"
+
 
     if @submission.notebook.present?
       @execute_in_colab_url = @submission.notebook.execute_in_colab_url
@@ -521,7 +537,7 @@ class SubmissionsController < ApplicationController
     is_owner_or_organizer = current_participant.present? && (policy(@challenge).edit? || helpers.submission_team?(@submission, current_participant))
     @show_file_tab = (@submission.notebook.present? || (@submission.submission_files.present? && (@challenge.submissions_downloadable))) && is_owner_or_organizer
     @show_notebook_tab = @post.is_public.count > 0 ||  is_owner_or_organizer
-    @show_status_tab = @description_markdown.present? && is_owner_or_organizer
+    @show_status_tab = true #@description_markdown.present? && is_owner_or_organizer
   end
 
   def set_admin_variable
