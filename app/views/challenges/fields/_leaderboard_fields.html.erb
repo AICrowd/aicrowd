@@ -15,6 +15,11 @@
         <span class="switcher"></span>
         <span class="label">Default Leaderboard</span>
       <% end %>
+      <%= f.label :disable_computation, class: "toggle-switch toggle-switch-large" do %>
+        <%= f.check_box :disable_computation, class: "leaderboard-active-switch" %>
+        <span class="switcher"></span>
+        <span class="label">Disable Recomputation</span>
+      <% end %>
       <span class="float-right"><%= render partial: 'challenges/fields/fancy_radio', locals: { f: f, name: :show_leaderboard, text: "Public?" } %></span>
       <span class="float-right"><%= render partial: 'challenges/fields/fancy_radio', locals: { f: f, name: :media_on_leaderboard, text: "Media Asset?" } %></span>
       <% if params["meta_challenge_id"].present? %>
