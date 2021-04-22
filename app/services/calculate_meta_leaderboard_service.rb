@@ -1,12 +1,16 @@
 class CalculateMetaLeaderboardService
 
-  def initialize(challenge_id:)
+  def initialize(challenge_id:, challenge_leaderboard_extra: nil)
     @challenge = Challenge.find(challenge_id)
 
     if !@challenge.meta_challenge && !@challenge.ml_challenge
       raise Exception.new('This service should only be called for meta or ml challenges')
     end
     @round = @challenge.active_round
+    @challenge_leaderboard_extra = challenge_leaderboard_extra
+    if challenge_leaderboard_extra.nil?
+      @challenge_leaderboard_extra = @round.default_leaderboard
+    end
 
     @child_leaderboards = []
     @weight_hash = {}
@@ -61,13 +65,16 @@ class CalculateMetaLeaderboardService
       seq: rank,
       meta: scores['rank'],
       submitter_type: participant[0],
-      submitter_id: participant[1]
+      submitter_id: participant[1],
+      challenge_leaderboard_extra_id: @challenge_leaderboard_extra.id
     }
   end
 
   def create_leaderboard
     people = {}
     @child_leaderboards.each do |child_leaderboard|
+      filter = child_leaderboard&.first&.challenge_leaderboard_extra&.filter
+      child_leaderboard = child_leaderboard.joins(:participant).where(filter) if filter.present?
       child_leaderboard.each do |entry|
         key = [entry['submitter_type'], entry['submitter_id']]
         if !people.has_key?(key)
@@ -92,7 +99,8 @@ class CalculateMetaLeaderboardService
       end
     end
 
-    BaseLeaderboard.where(challenge_id: @challenge.id, challenge_round_id: @round.id).delete_all
+    delete_leaderboards
+
     rank       = @challenge.ml_challenge ? people.size : 0
     last_score = -1
 
@@ -104,6 +112,18 @@ class CalculateMetaLeaderboardService
       obj = BaseLeaderboard.new(common_values.merge(participant_values(rank, key, value)))
       obj.save!
     end
+  end
+
+  def delete_leaderboards
+    entries = BaseLeaderboard.where(challenge_id: @challenge.id, challenge_round_id: @round.id)
+
+    if @challenge_leaderboard_extra.default
+      entries = entries.where(challenge_leaderboard_extra_id: [nil, @challenge_leaderboard_extra.id])
+    else
+      entries = entries.where(challenge_leaderboard_extra_id: @challenge_leaderboard_extra.id)
+    end
+
+    entries.delete_all
   end
 
 end
