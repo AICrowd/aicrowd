@@ -20,6 +20,7 @@
 //= require ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js
 //= require ace-rails-ap
 //= require commontator/application
+//= require cropperjs/dist/cropper.js
 
 // --------------------- Vendor ------------------------ //
 //= require jQuery-File-Upload
