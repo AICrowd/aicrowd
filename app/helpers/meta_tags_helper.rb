@@ -43,6 +43,8 @@ module MetaTagsHelper
         @challenge.social_media_image_url ? @challenge.social_media_image_url : @challenge.image_url
       elsif controller_name == 'organizers' && @organizer.image_file?
         @organizer.image_file.url
+      elsif controller_name == 'participants' && params[:badge]
+        AicrowdUserBadge.find(params[:badge]).badge_image_url
       elsif controller_name == 'participants' && @participant.image_file?
         @participant.image_file.url
       end

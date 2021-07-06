@@ -61,4 +61,21 @@ module ParticipantsHelper
 
     participant.ml_activity_points.group_by_day(:created_at, format: "%Y-%m-%d").sum_points_by_day
   end
+
+  def social_share_badge(site, badge, text=nil)
+    title = text.presence || badge.aicrowd_badge['description']
+    content_tag(:span,
+                data: {
+                    title: title,
+                    desc:  badge.aicrowd_badge['description'],
+                    img:   badge.badge_image_url,
+                    url:   participant_url(badge.participant, badge: badge),
+                    href:  participant_url(badge.participant, badge: badge)
+                }) do
+      social_share_link(site, participant_url(badge.participant, badge: badge)) do
+        image_tag(social_image_path(site))
+      end
+    end
+  end
+
 end
