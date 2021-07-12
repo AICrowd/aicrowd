@@ -11693,6 +11693,11 @@ body {
   }
 }
 
+.masthead-blog-post-notebook {
+  background: transparent;
+  padding: 48px 0 40px 0;
+}
+
 .masthead-blog-post {
   background: transparent;
   padding: 48px 0 40px 0;
@@ -11756,6 +11761,14 @@ body {
   justify-content: center;
 }
 
+.masthead-blog-post-notebook .masthead-details {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+
 @media (max-width: 991.98px) {
   .masthead-challenge p,
   .masthead-blog-post p {
@@ -11779,7 +11792,8 @@ body {
 .masthead-challenge .organizer-attribution,
 .masthead-challenge .author,
 .masthead-blog-post .organizer-attribution,
-.masthead-blog-post .author {
+.masthead-blog-post .author
+.masthead-blog-post-notebook .author{
   display: flex;
   align-items: center;
   flex-shrink: 0;
@@ -11846,6 +11860,11 @@ body {
 }
 
 .masthead-blog-post .masthead-details .masthead-date::before {
+  content: "·";
+  margin: 0 12px;
+}
+
+.masthead-blog-post-notebook .masthead-details .masthead-date::before {
   content: "·";
   margin: 0 12px;
 }
@@ -12603,7 +12622,7 @@ body {
 
 @media (min-width: 0px) and (max-width: 479px) {
   .sub-nav-bar .nav-item {
-    margin-right: 1.5rem;
+    margin-right: 0.5rem;
   }
 }
 
@@ -12645,7 +12664,8 @@ body {
 
 @media (max-width: 575.98px) {
   .sub-nav-bar .nav-link-04,
-  .sub-nav-bar .nav-link-03 {
+  .sub-nav-bar .nav-link-03,
+  .sub-nav-bar .nav-link-07, {
     display: none;
   }
 }
@@ -14592,6 +14612,18 @@ input.width-185 {
   margin: 0;
 }
 
+.notebook-community-contribution {
+  font-size: 12px;
+  height: 64px;
+  background-color: #FFF0CC;
+  margin-top: -54px;
+  width: 246px;
+  align-content: center;
+}
+
+.blog-discussion {
+  width: 117%;
+}
 
 @import '../javascripts/ckeditor/plugins/codesnippet/lib/highlight/styles/sunburst';
 @import 'challenges/form';
